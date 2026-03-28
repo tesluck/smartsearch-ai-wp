@@ -90,7 +90,7 @@ class SSAI_Shortcodes {
 
             <?php if ( ! SmartSearch_AI::is_pro() ) : ?>
             <div class="ssai-powered-by">
-                <small>Powered by <a href="https://smartsearchai.dev/?utm_source=widget" target="_blank" rel="noopener">SmartSearch AI</a></small>
+                <small>Powered by <a href="https://timtesluck.com/smartsearch-ai/?utm_source=widget" target="_blank" rel="noopener">SmartSearch AI</a></small>
             </div>
             <?php endif; ?>
         </div>

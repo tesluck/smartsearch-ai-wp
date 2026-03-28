@@ -184,6 +184,15 @@ class SSAI_Admin {
 			esc_html__( 'Settings', 'smartsearch-ai' )
 		);
 		array_unshift( $links, $settings_link );
+
+		if ( ! SmartSearch_AI::is_pro() ) {
+			$links[] = sprintf(
+				'<a href="%s" style="color:#00a32a;font-weight:700;">%s</a>',
+				esc_url( SmartSearch_AI::pro_url( 'plugins-page' ) ),
+				esc_html__( 'Upgrade to Pro', 'smartsearch-ai' )
+			);
+		}
+
 		return $links;
 	}
 

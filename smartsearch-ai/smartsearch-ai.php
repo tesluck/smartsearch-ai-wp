@@ -234,6 +234,11 @@ final class SmartSearch_AI {
      * @return string
      */
     public static function pro_url( $utm_source = 'plugin' ) {
+        // Use Freemius in-dashboard upgrade page when available.
+        if ( function_exists( 'ssai_fs' ) ) {
+            return ssai_fs()->get_upgrade_url();
+        }
+
         return add_query_arg( array(
             'utm_source'   => $utm_source,
             'utm_medium'   => 'plugin',

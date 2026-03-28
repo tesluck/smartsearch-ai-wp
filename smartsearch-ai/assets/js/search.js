@@ -69,6 +69,11 @@
         this.$resultsContainer = $themeForm.find('.search-results-live');
         this.themeMode = true;
 
+        // Disable theme's live search handler (uses delegated keyup, can't unbind directly)
+        this.$searchInput.on('keyup', function (e) {
+          e.stopImmediatePropagation();
+        });
+
         // Prevent default form submission — use AJAX search instead
         this.$wrapper.on('submit', function (e) {
           e.preventDefault();

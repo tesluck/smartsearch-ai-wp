@@ -3,7 +3,7 @@
  * Plugin Name: SmartSearch AI
  * Plugin URI: https://smartsearchai.dev
  * Description: Intelligent natural language search for WordPress. Your visitors describe their problem — SmartSearch AI understands what they need and shows the right results. Ships with 40+ home service categories out of the box, fully configurable for any industry. Optional AI-powered fallback for unmatched queries.
- * Version: 1.0.0
+ * Version: 1.0.2
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: MrTask

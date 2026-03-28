@@ -1,10 +1,10 @@
 === SmartSearch AI — Intelligent Search Plugin for WordPress ===
 Contributors: mrtask, ttesluck
-Tags: search, AI search, smart search, natural language, autocomplete, service directory, fuzzy search
+Tags: search, smart search, natural language, autocomplete, fuzzy search
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,7 +55,13 @@ Instead of forcing visitors to guess the exact terms in your database, SmartSear
 * 🏷️ White-label option — remove SmartSearch AI branding
 * 📧 Priority email support
 
-[Upgrade to Pro →](https://smartsearchai.dev/pro/)
+[Upgrade to Pro](https://smartsearchai.dev/pro/)
+
+= External Services =
+
+The free version of SmartSearch AI performs all search processing locally on your WordPress server. No visitor data is sent to any external service.
+
+The optional Pro AI fallback feature sends unmatched search queries to [OpenAI's API](https://openai.com/policies/privacy-policy) for natural language interpretation. This feature is disabled by default and requires you to provide your own API key. Only the search query text is transmitted. If you enable this feature, we recommend disclosing it in your site's privacy policy.
 
 = Quick Start =
 
@@ -130,12 +136,21 @@ The free version processes everything locally — no external requests. The Pro 
 
 == Changelog ==
 
+= 1.0.2 — 2026-03-27 =
+* Redesigned autocomplete dropdown to compact Google-style design
+* Fixed search button not navigating to results page in theme integration mode
+* Fixed dropdown suggestions flashing/disappearing due to theme JS conflicts
+* Improved scoring: synonyms and intents now use best-of matching (prevents inflated scores)
+* Added fuzzy matching for misspellings in intent phrase word overlap
+* Added new intent phrases for better coverage of common queries
+* Helpful empty state with clickable example queries
+
 = 1.0.0 — 2026-03-27 =
-* 🎉 Initial release
+* Initial release
 * Dictionary-based intent matching with synonyms, intents, and keywords
 * Client-side Fuse.js autocomplete
 * Server-side AJAX search with WP_Query integration
-* Home services dictionary (40+ categories, 300+ intents)
+* Home services dictionary (20+ categories, 200+ intents)
 * Admin settings panel with tabbed interface
 * Dictionary import/export (JSON)
 * Shortcode with location, placeholder, and button customization
@@ -144,6 +159,9 @@ The free version processes everything locally — no external requests. The Pro 
 * Responsive design
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+Improved search accuracy, redesigned dropdown, and fixed theme integration bugs. Recommended for all users.
 
 = 1.0.0 =
 Initial release. Install to give your visitors intelligent, intent-aware search.

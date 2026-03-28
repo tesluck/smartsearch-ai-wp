@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name: SmartSearch AI
- * Plugin URI: https://smartsearchai.dev
+ * Plugin URI: https://timtesluck.com/smartsearch-ai
  * Description: Intelligent natural language search for WordPress. Your visitors describe their problem — SmartSearch AI understands what they need and shows the right results. Ships with 40+ home service categories out of the box, fully configurable for any industry. Optional AI-powered fallback for unmatched queries.
  * Version: 1.0.2
  * Requires at least: 5.8
  * Requires PHP: 7.4
- * Author: MrTask
- * Author URI: https://mrtask.com
+ * Author: Tim Tesluck
+ * Author URI: https://timtesluck.com
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: smartsearch-ai
@@ -25,6 +25,40 @@ define( 'SSAI_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SSAI_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'SSAI_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 define( 'SSAI_PLUGIN_FILE', __FILE__ );
+
+/**
+ * Initialize Freemius SDK.
+ */
+if ( ! function_exists( 'ssai_fs' ) ) {
+    function ssai_fs() {
+        global $ssai_fs;
+
+        if ( ! isset( $ssai_fs ) ) {
+            require_once SSAI_PLUGIN_DIR . 'freemius/start.php';
+
+            $ssai_fs = fs_dynamic_init( array(
+                'id'                  => '26692',
+                'slug'                => 'smartsearch-ai',
+                'type'                => 'plugin',
+                'public_key'          => 'pk_2dea5e89168c4488752e706d9e566',
+                'is_premium'          => false,
+                'has_addons'          => false,
+                'has_paid_plans'      => true,
+                'menu'                => array(
+                    'slug'    => 'smartsearch-ai',
+                    'parent'  => array(
+                        'slug' => 'options-general.php',
+                    ),
+                ),
+            ) );
+        }
+
+        return $ssai_fs;
+    }
+
+    ssai_fs();
+    do_action( 'ssai_fs_loaded' );
+}
 
 /**
  * Main SmartSearch AI plugin class.
@@ -190,7 +224,7 @@ final class SmartSearch_AI {
      * @return bool
      */
     public static function is_pro() {
-        return apply_filters( 'ssai_is_pro', false );
+        return function_exists( 'ssai_fs' ) && ssai_fs()->can_use_premium_code();
     }
 
     /**
@@ -204,7 +238,7 @@ final class SmartSearch_AI {
             'utm_source'   => $utm_source,
             'utm_medium'   => 'plugin',
             'utm_campaign' => 'upgrade',
-        ), 'https://smartsearchai.dev/pro/' );
+        ), 'https://timtesluck.com/smartsearch-ai/pro/' );
     }
 }
 

@@ -1,8 +1,8 @@
-=== SmartSearch AI — Intelligent Search Plugin for WordPress ===
-Contributors: mrtask, ttesluck
+=== SmartSearch AI ===
+Contributors: timtesluck
 Tags: search, smart search, natural language, autocomplete, fuzzy search
 Requires at least: 5.8
-Tested up to: 6.7
+Tested up to: 6.9
 Requires PHP: 7.4
 Stable tag: 1.0.2
 License: GPLv2 or later
@@ -55,7 +55,7 @@ Instead of forcing visitors to guess the exact terms in your database, SmartSear
 * 🏷️ White-label option — remove SmartSearch AI branding
 * 📧 Priority email support
 
-[Upgrade to Pro](https://smartsearchai.dev/pro/)
+[Upgrade to Pro](https://timtesluck.com/smartsearch-ai/pro/)
 
 = External Services =
 
@@ -168,7 +168,7 @@ Initial release. Install to give your visitors intelligent, intent-aware search.
 
 == Credits ==
 
-SmartSearch AI is built and maintained by [MrTask](https://mrtask.com).
+SmartSearch AI is built and maintained by [Tim Tesluck](https://timtesluck.com).
 
 **Open Source Libraries:**
 
@@ -177,5 +177,4 @@ SmartSearch AI is built and maintained by [MrTask](https://mrtask.com).
 **Like this plugin?**
 
 * ⭐ [Rate it on WordPress.org](https://wordpress.org/support/plugin/smartsearch-ai/reviews/#new-post)
-* ☕ [Buy us a coffee](https://buymeacoffee.com/mrtask)
-* 🐛 [Report a bug](https://github.com/mrtask/smartsearch-ai-wp/issues)
+* 🐛 [Report a bug](https://github.com/tesluck/smartsearch-ai-wp/issues)

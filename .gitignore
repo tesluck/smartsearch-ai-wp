@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build artifacts
+dist/
+*.zip
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+debug.log
+npm-debug.log*
+
+# Testing
+.phpunit.result.cache
+coverage/
+
+# Temporary
+tmp/
+temp/

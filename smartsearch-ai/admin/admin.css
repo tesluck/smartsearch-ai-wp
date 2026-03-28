@@ -1,0 +1,173 @@
+/* SmartSearch AI — Admin Styles */
+
+.ssai-admin-wrap {
+  max-width: 900px;
+}
+
+/* Tabs */
+.ssai-admin-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #e0e0e0;
+  margin: 20px 0;
+}
+
+.ssai-tab {
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.2s;
+}
+
+.ssai-tab:hover { color: #2563eb; }
+
+.ssai-tab.active {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+}
+
+.ssai-tab-content { display: none; }
+.ssai-tab-content.active { display: block; }
+
+/* Services list */
+.ssai-services-list {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.ssai-service-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 13px;
+}
+
+.ssai-service-row:last-child { border-bottom: none; }
+.ssai-service-row strong { min-width: 200px; }
+
+.ssai-service-cat {
+  background: #eef2ff;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #3730a3;
+  white-space: nowrap;
+}
+
+.ssai-service-stats {
+  color: #999;
+  font-size: 12px;
+  margin-left: auto;
+}
+
+.ssai-service-count {
+  font-weight: 400;
+  font-size: 14px;
+  color: #888;
+}
+
+/* Shortcode examples */
+.ssai-shortcode-examples code {
+  background: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 13px;
+}
+
+.ssai-shortcode-examples pre {
+  background: #f5f5f5;
+  padding: 12px 16px;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+/* Pro upsell banner */
+.ssai-pro-banner {
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+  border: 1px solid #c7d2fe;
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin: 16px 0;
+}
+
+.ssai-pro-banner h3 {
+  margin: 0 0 8px;
+  color: #3730a3;
+  font-size: 16px;
+}
+
+.ssai-pro-banner p {
+  margin: 0 0 12px;
+  color: #555;
+}
+
+.ssai-pro-banner .button-primary {
+  background: #4f46e5;
+  border-color: #4338ca;
+}
+
+.ssai-pro-banner .button-primary:hover {
+  background: #4338ca;
+}
+
+/* Pro feature list */
+.ssai-pro-features {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+}
+
+.ssai-pro-features li {
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.ssai-pro-features li::before {
+  content: "✓ ";
+  color: #4f46e5;
+  font-weight: bold;
+}
+
+/* OpenAI status */
+#ssai-openai-status {
+  margin-left: 8px;
+  font-weight: 600;
+}
+
+#ssai-openai-status.success { color: #059669; }
+#ssai-openai-status.error { color: #dc2626; }
+
+/* Footer credit */
+.ssai-admin-footer {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+  font-size: 13px;
+  color: #888;
+}
+
+.ssai-admin-footer a {
+  color: #666;
+  text-decoration: none;
+}
+
+.ssai-admin-footer a:hover {
+  color: #2563eb;
+}
+
+.ssai-footer-links {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}

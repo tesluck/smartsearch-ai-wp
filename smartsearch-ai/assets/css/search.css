@@ -134,80 +134,102 @@
    SUGGESTIONS DROPDOWN
    ============================================================================ */
 
+/* Theme override: take full control of .search-results-live when SSAI is active */
+.search-results-live.ssai-dropdown-active {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: #ffffff !important;
+  padding: 4px 0 !important;
+  border-radius: 0 0 8px 8px !important;
+  max-height: 380px !important;
+  overflow: hidden !important;
+  overflow-y: auto !important;
+  z-index: 9999 !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid #dfe1e5 !important;
+  border-top: none !important;
+  display: none;
+}
+
+.search-results-live.ssai-dropdown-active.visible {
+  display: block !important;
+}
+
+/* Plugin shortcode mode */
 .ssai-suggestions {
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
   background-color: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  max-height: 400px;
+  border: 1px solid #dfe1e5;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 380px;
   overflow-y: auto;
   z-index: 9999;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.06);
   display: none;
-  margin-top: 8px;
+  margin-top: 0;
+  padding: 4px 0;
 }
 
 .ssai-suggestions.visible {
   display: block;
 }
 
-/* Category label inside suggestions */
-.ssai-category-label {
-  padding: 8px 16px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #6b7280;
-  background-color: #f9fafb;
-  margin-top: 0;
-  margin-bottom: 4px;
-  position: sticky;
-  top: 0;
-}
-
-.ssai-category-label:first-child {
-  margin-top: 0;
-}
-
-/* Individual suggestion item */
+/* Individual suggestion item — Google-style compact row */
 .ssai-suggestion-item {
-  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
   cursor: pointer;
-  border-bottom: 1px solid #f3f4f6;
-  transition: background-color 0.15s ease;
-}
-
-.ssai-suggestion-item:last-child {
-  border-bottom: none;
+  transition: background-color 0.08s ease;
 }
 
 .ssai-suggestion-item:hover {
-  background-color: #f3f4f6;
+  background-color: #f1f3f4;
 }
 
 .ssai-suggestion-item.selected {
-  background-color: #eff6ff;
-  border-left: 3px solid #2563eb;
-  padding-left: 13px;
+  background-color: #f1f3f4;
 }
 
-/* Matched text highlighting in suggestion name */
-.ssai-suggestion-name strong {
-  color: #2563eb;
-  font-weight: 600;
+/* Search icon in suggestion row */
+.ssai-sg-icon {
+  width: 16px;
+  height: 16px;
+  color: #9aa0a6;
+  flex-shrink: 0;
 }
 
-/* Intent phrase shown in suggestions */
-.ssai-suggestion-intent {
-  font-style: italic;
-  font-size: 14px;
-  color: #6b7280;
-  margin-top: 4px;
-  display: block;
+/* Text wrapper — name + context on one line */
+.ssai-sg-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 15px;
+  line-height: 1.4;
+  color: #202124;
+}
+
+.ssai-sg-name {
+  font-weight: 400;
+}
+
+.ssai-sg-name strong {
+  font-weight: 700;
+  color: #202124;
+}
+
+.ssai-sg-context {
+  color: #70757a;
+  font-size: 13px;
 }
 
 /* ============================================================================
@@ -407,8 +429,9 @@
     padding: 12px;
   }
 
-  .ssai-suggestions {
-    max-height: 300px;
+  .ssai-suggestions,
+  .search-results-live.ssai-dropdown-active {
+    max-height: 300px !important;
   }
 }
 
@@ -430,25 +453,29 @@
    SCROLLBAR STYLING (WEBKIT BROWSERS)
    ============================================================================ */
 
-.ssai-suggestions::-webkit-scrollbar {
-  width: 8px;
+.ssai-suggestions::-webkit-scrollbar,
+.search-results-live.ssai-dropdown-active::-webkit-scrollbar {
+  width: 6px;
 }
 
-.ssai-suggestions::-webkit-scrollbar-track {
+.ssai-suggestions::-webkit-scrollbar-track,
+.search-results-live.ssai-dropdown-active::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.ssai-suggestions::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 4px;
+.ssai-suggestions::-webkit-scrollbar-thumb,
+.search-results-live.ssai-dropdown-active::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 3px;
 }
 
-.ssai-suggestions::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+.ssai-suggestions::-webkit-scrollbar-thumb:hover,
+.search-results-live.ssai-dropdown-active::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
 }
 
 /* ============================================================================
-   CLICKABLE SERVICE CHIPS
+   CLICKABLE SERVICE CHIPS (USED IN BANNERS & RESULTS)
    ============================================================================ */
 
 .ssai-chip-bar {
@@ -481,7 +508,7 @@
 }
 
 /* ============================================================================
-   "DID YOU MEAN?" BANNER (LOW CONFIDENCE)
+   "DID YOU MEAN?" — NOT USED IN DROPDOWN ANYMORE (kept for results banners)
    ============================================================================ */
 
 .ssai-did-you-mean {
@@ -511,17 +538,6 @@
   background-color: #f59e0b;
   color: #ffffff;
   border-color: #f59e0b;
-}
-
-/* ============================================================================
-   MATCH REASON (WHY THIS RESULT MATCHED)
-   ============================================================================ */
-
-.ssai-match-reason {
-  font-size: 12px;
-  color: #9ca3af;
-  font-style: italic;
-  margin-top: 2px;
 }
 
 /* ============================================================================
@@ -575,23 +591,52 @@
    ============================================================================ */
 
 .ssai-empty-help {
-  padding: 20px 16px;
-  text-align: center;
+  padding: 0;
 }
 
 .ssai-empty-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 8px;
+  padding: 10px 16px 2px;
+  font-size: 13px;
+  font-weight: 400;
+  color: #70757a;
 }
 
 .ssai-empty-subtitle {
+  padding: 0 16px 6px;
   font-size: 13px;
-  color: #6b7280;
-  margin-bottom: 12px;
+  color: #9aa0a6;
 }
 
+/* Example row — matches suggestion row style exactly */
+.ssai-example-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.08s ease;
+  text-decoration: none;
+  color: #202124;
+  font-size: 15px;
+}
+
+.ssai-example-row:hover {
+  background-color: #f1f3f4;
+  text-decoration: none;
+  color: #202124;
+}
+
+.ssai-example-row .ssai-sg-icon {
+  color: #9aa0a6;
+}
+
+.ssai-example-row .ssai-sg-name {
+  font-weight: 400;
+  color: #5f6368;
+  font-style: italic;
+}
+
+/* Legacy chip-based example links (kept for results page) */
 .ssai-example-list {
   display: flex;
   flex-wrap: wrap;
@@ -639,7 +684,6 @@
   }
 
   .ssai-example-list {
-    flex-direction: column;
-    align-items: center;
+    gap: 6px;
   }
 }

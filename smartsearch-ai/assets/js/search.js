@@ -69,16 +69,16 @@
         this.$resultsContainer = $themeForm.find('.search-results-live');
         this.themeMode = true;
 
+        // Mark the dropdown container for SSAI-specific styling
+        this.$suggestionsBox.addClass('ssai-dropdown-active');
+
         // Disable theme's live search handler (uses delegated keyup, can't unbind directly)
         this.$searchInput.on('keyup', function (e) {
           e.stopImmediatePropagation();
         });
 
-        // Prevent default form submission — use AJAX search instead
-        this.$wrapper.on('submit', function (e) {
-          e.preventDefault();
-          SmartSearchAI.performSearch();
-        });
+        // In theme mode, let the form submit normally (navigates to search results page).
+        // The search page banner (renderSearchPageBanner) handles the UX there.
       }
 
       // Fetch search index on load
@@ -154,11 +154,13 @@
         self.handleInputKeydown(e);
       });
 
-      // Search button click
-      this.$searchBtn.on('click', function (e) {
-        e.preventDefault();
-        self.performSearch();
-      });
+      // Search button click — in theme mode, let the form submit normally
+      if (!this.themeMode) {
+        this.$searchBtn.on('click', function (e) {
+          e.preventDefault();
+          self.performSearch();
+        });
+      }
 
       // Location input can also trigger search on Enter
       this.$locationInput.on('keydown', function (e) {
@@ -185,7 +187,11 @@
         const name = $(this).data('name');
         self.$searchInput.val(name);
         self.closeSuggestions();
-        self.performSearch();
+        if (self.themeMode) {
+          self.$wrapper[0].submit();
+        } else {
+          self.performSearch();
+        }
       });
 
       // Chip click — search for that service
@@ -200,7 +206,7 @@
       });
 
       // Example query click
-      $(document).on('click', '.ssai-example-link', function (e) {
+      $(document).on('click', '.ssai-example-link, .ssai-example-row', function (e) {
         e.preventDefault();
         const query = $(this).data('query');
         if (query) {
@@ -243,11 +249,11 @@
 
       // Skip if suggestions box is not visible or empty
       if (!this.$suggestionsBox.hasClass('visible') || itemCount === 0) {
-        if (e.keyCode === 13) {
-          // Enter key - perform search
+        if (e.keyCode === 13 && !this.themeMode) {
           e.preventDefault();
           this.performSearch();
         }
+        // In theme mode, let Enter submit the form naturally
         return;
       }
 
@@ -271,14 +277,23 @@
           break;
 
         case 13: // Enter
-          e.preventDefault();
           if (this.selectedSuggestionIndex >= 0) {
+            e.preventDefault();
             const $selected = $items.eq(this.selectedSuggestionIndex);
             const name = $selected.data('name');
             this.$searchInput.val(name);
             this.closeSuggestions();
+            // Submit the form (theme mode: native submit, shortcode mode: AJAX)
+            if (this.themeMode) {
+              this.$wrapper.off('submit').submit();
+            } else {
+              this.performSearch();
+            }
+          } else if (!this.themeMode) {
+            e.preventDefault();
+            this.performSearch();
           }
-          this.performSearch();
+          // In theme mode with no selection, let Enter submit naturally
           break;
 
         case 27: // Escape
@@ -372,14 +387,12 @@
       const self = this;
       let html = '';
 
-      // Sort categories alphabetically (but keep 'Other' last)
       const categories = Object.keys(grouped).sort(function (a, b) {
         if (a === 'Other') return 1;
         if (b === 'Other') return -1;
         return a.localeCompare(b);
       });
 
-      // If no results, show helpful empty state
       if (categories.length === 0) {
         html = this.renderEmptyState(query);
         this.$suggestionsBox.html(html);
@@ -387,70 +400,40 @@
         return;
       }
 
-      // Collect top services for chip bar (max 3, deduplicated)
-      const topServices = [];
-      const seenChips = {};
+      // Flatten all services, deduplicated
+      const allServices = [];
+      const seenIds = {};
       categories.forEach(function (cat) {
         grouped[cat].forEach(function (item) {
-          if (!seenChips[item.name] && topServices.length < 3) {
-            topServices.push(item);
-            seenChips[item.name] = true;
+          if (!seenIds[item.service_id]) {
+            seenIds[item.service_id] = true;
+            allServices.push(item);
           }
         });
       });
 
-      // Low confidence "Did you mean?" banner
-      if (confidence === 'low' && topServices.length > 0) {
-        html += '<div class="ssai-did-you-mean">';
-        html += '<span class="ssai-dym-label">Did you mean?</span>';
-        topServices.forEach(function (svc) {
-          html += '<span class="ssai-chip" data-service="' + self.escapeHtml(svc.name) + '">'
-            + self.escapeHtml(svc.name)
-            + '</span>';
-        });
-        html += '</div>';
-      }
+      // Uniform rows — same structure regardless of confidence
+      allServices.slice(0, 7).forEach(function (item) {
+        var highlightedName = self.highlightMatches(item.name, query);
 
-      // Service chips bar (for medium/high confidence)
-      if (confidence !== 'low' && topServices.length > 1) {
-        html += '<div class="ssai-chip-bar">';
-        topServices.forEach(function (svc) {
-          html += '<span class="ssai-chip" data-service="' + self.escapeHtml(svc.name) + '">'
-            + self.escapeHtml(svc.name)
-            + '</span>';
-        });
-        html += '</div>';
-      }
+        // Subtle context — keep it short
+        var context = '';
+        if (item.type === 'synonym' && item.term) {
+          context = item.term;
+        } else if (item.type === 'intent' && item.term) {
+          context = item.term;
+        } else if (item.category) {
+          context = item.category;
+        }
 
-      categories.forEach(function (category) {
-        const items = grouped[category];
-        html += '<div class="ssai-category-label">' + self.escapeHtml(category) + '</div>';
-
-        items.slice(0, 5).forEach(function (item) {
-          // Highlight matching text
-          const highlightedName = self.highlightMatches(item.name, query);
-          const intentPhrase = item.intent_phrases
-            ? item.intent_phrases[0]
-            : '';
-
-          // Show match reason
-          let matchReason = '';
-          if (item.type === 'synonym') {
-            matchReason = 'Also known as: ' + self.escapeHtml(item.term);
-          } else if (item.type === 'intent' && item.term) {
-            matchReason = 'For: "' + self.escapeHtml(item.term) + '"';
-          }
-
-          html +=
-            '<div class="ssai-suggestion-item" data-name="' + self.escapeHtml(item.name) + '" data-service-id="' + self.escapeHtml(item.service_id) + '">' +
-              '<div class="ssai-suggestion-name">' + highlightedName + '</div>' +
-              (matchReason
-                ? '<div class="ssai-match-reason">' + matchReason + '</div>'
-                : (intentPhrase
-                  ? '<div class="ssai-suggestion-intent">"' + self.escapeHtml(intentPhrase) + '"</div>'
-                  : '')) +
-            '</div>';
-        });
+        html +=
+          '<div class="ssai-suggestion-item" data-name="' + self.escapeHtml(item.name) + '" data-service-id="' + self.escapeHtml(item.service_id) + '">' +
+            '<svg class="ssai-sg-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd"/></svg>' +
+            '<div class="ssai-sg-text">' +
+              '<span class="ssai-sg-name">' + highlightedName + '</span>' +
+              (context ? '<span class="ssai-sg-context"> &mdash; ' + self.escapeHtml(context) + '</span>' : '') +
+            '</div>' +
+          '</div>';
       });
 
       this.$suggestionsBox.html(html);
@@ -469,15 +452,19 @@
       ];
 
       let html = '<div class="ssai-empty-help">';
-      html += '<div class="ssai-empty-title">No matches for "' + this.escapeHtml(query) + '"</div>';
-      html += '<div class="ssai-empty-subtitle">Try describing your problem:</div>';
-      html += '<div class="ssai-example-list">';
+      html += '<div class="ssai-empty-title">No results for "' + this.escapeHtml(query) + '"</div>';
+      html += '<div class="ssai-empty-subtitle">Try something like:</div>';
+
+      // Render examples as suggestion-style rows (same look as real results)
       examples.forEach(function (ex) {
-        html += '<a href="#" class="ssai-example-link" data-query="' + self.escapeHtml(ex) + '">'
-          + self.escapeHtml(ex)
-          + '</a>';
+        html +=
+          '<a href="#" class="ssai-example-row" data-query="' + self.escapeHtml(ex) + '">' +
+            '<svg class="ssai-sg-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd"/></svg>' +
+            '<span class="ssai-sg-name">' + self.escapeHtml(ex) + '</span>' +
+          '</a>';
       });
-      html += '</div></div>';
+
+      html += '</div>';
       return html;
     },
 

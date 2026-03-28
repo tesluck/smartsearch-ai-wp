@@ -152,43 +152,62 @@ class SSAI_Dictionary {
             $score += 40;
         }
 
-        // Synonyms
+        // Synonyms — score best-matching synonym, not sum of all
         if ( ! empty( $service['synonyms'] ) ) {
+            $best_syn_score = 0;
             foreach ( $service['synonyms'] as $synonym ) {
+                $syn_score = 0;
                 $syn_lower = strtolower( $synonym );
                 if ( $syn_lower === $query_lower ) {
-                    $score += 90;
+                    $best_syn_score = 90;
                     break;
                 }
                 if ( strpos( $syn_lower, $query_lower ) !== false || strpos( $query_lower, $syn_lower ) !== false ) {
-                    $score += 35;
+                    $syn_score += 35;
                 }
                 $overlap = count( array_intersect( $query_words, preg_split( '/\s+/', $syn_lower ) ) );
                 if ( $overlap > 0 ) {
-                    $score += $overlap * 10;
+                    $syn_score += $overlap * 10;
                 }
+                $best_syn_score = max( $best_syn_score, $syn_score );
             }
+            $score += $best_syn_score;
         }
 
-        // Intents — the key differentiator
+        // Intents — score best-matching intent, not sum of all
         if ( ! empty( $service['intents'] ) ) {
+            $best_intent_score = 0;
+
             foreach ( $service['intents'] as $intent ) {
+                $intent_score = 0;
                 $intent_lower = strtolower( $intent );
                 $intent_words = preg_split( '/\s+/', $intent_lower );
 
                 if ( $intent_lower === $query_lower ) {
-                    $score += 85;
+                    $best_intent_score = max( $best_intent_score, 85 );
                     break;
                 }
 
                 if ( strpos( $intent_lower, $query_lower ) !== false || strpos( $query_lower, $intent_lower ) !== false ) {
-                    $score += 30;
+                    $intent_score += 30;
                 }
 
-                // Word overlap
-                $overlap = array_intersect( $query_words, $intent_words );
-                if ( count( $overlap ) > 0 ) {
-                    $score += ( count( $overlap ) / count( $query_words ) ) * 25;
+                // Word overlap (with fuzzy matching for misspellings)
+                $overlap_count = 0;
+                foreach ( $query_words as $qw ) {
+                    if ( in_array( $qw, $intent_words, true ) ) {
+                        $overlap_count++;
+                    } elseif ( strlen( $qw ) >= 4 ) {
+                        foreach ( $intent_words as $iw ) {
+                            if ( strlen( $iw ) >= 4 && levenshtein( $qw, $iw ) <= 2 ) {
+                                $overlap_count++;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if ( $overlap_count > 0 ) {
+                    $intent_score += ( $overlap_count / count( $query_words ) ) * 25;
                 }
 
                 // Bigram matching
@@ -196,20 +215,60 @@ class SSAI_Dictionary {
                 $intent_bigrams = $this->get_bigrams( $intent_lower );
                 $bigram_overlap = count( array_intersect( $query_bigrams, $intent_bigrams ) );
                 if ( $bigram_overlap > 0 ) {
-                    $score += $bigram_overlap * 8;
+                    $intent_score += $bigram_overlap * 8;
                 }
+
+                $best_intent_score = max( $best_intent_score, $intent_score );
             }
+
+            $score += $best_intent_score;
         }
 
-        // Keywords
+        // Keywords (with fuzzy matching)
         if ( ! empty( $service['keywords'] ) ) {
             foreach ( $service['keywords'] as $keyword ) {
                 $kw_lower = strtolower( $keyword );
+                $kw_words = preg_split( '/\s+/', $kw_lower );
                 foreach ( $query_words as $word ) {
                     if ( $word === $kw_lower ) {
                         $score += 15;
                     } elseif ( strpos( $word, $kw_lower ) !== false || strpos( $kw_lower, $word ) !== false ) {
                         $score += 5;
+                    } else {
+                        // Fuzzy match: check each keyword word
+                        foreach ( $kw_words as $kw_word ) {
+                            if ( strlen( $word ) >= 4 && strlen( $kw_word ) >= 4 ) {
+                                $dist = levenshtein( $word, $kw_word );
+                                if ( $dist <= 2 ) {
+                                    $score += ( $dist === 1 ) ? 12 : 8;
+                                    break;
+                                }
+                                if ( soundex( $word ) === soundex( $kw_word ) ) {
+                                    $score += 10;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Synonyms fuzzy matching (catch misspellings of service-specific terms)
+        if ( ! empty( $service['synonyms'] ) ) {
+            foreach ( $service['synonyms'] as $synonym ) {
+                $syn_words = preg_split( '/\s+/', strtolower( $synonym ) );
+                foreach ( $query_words as $word ) {
+                    if ( strlen( $word ) >= 4 ) {
+                        foreach ( $syn_words as $syn_word ) {
+                            if ( strlen( $syn_word ) >= 4 ) {
+                                $dist = levenshtein( $word, $syn_word );
+                                if ( $dist > 0 && $dist <= 2 ) {
+                                    $score += ( $dist === 1 ) ? 20 : 12;
+                                    break 2;
+                                }
+                            }
+                        }
                     }
                 }
             }

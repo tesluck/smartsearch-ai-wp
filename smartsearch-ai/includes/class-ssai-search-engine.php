@@ -44,15 +44,22 @@ class SSAI_Search_Engine {
 
             $posts = $this->query_posts( $service_names, $categories, $location, $limit );
 
+            // Build matched_services with scores (deduplicated, top 3)
+            $matched_services = $this->build_matched_services( $dict_results, 3 );
+            $top_score        = $dict_results[0]['score'];
+            $confidence       = $this->score_to_confidence( $top_score );
+
             // Track search for analytics (Pro)
             do_action( 'ssai_search_performed', $query, 'dictionary', $dict_results );
 
             return array(
-                'services'    => array_column( $dict_results, 'service' ),
-                'posts'       => $posts,
-                'source'      => 'dictionary',
-                'interpreted' => sprintf( __( 'Showing results for: %s', 'smartsearch-ai' ), implode( ', ', array_slice( $service_names, 0, 3 ) ) ),
-                'query'       => $query,
+                'matched_services' => $matched_services,
+                'posts'            => $posts,
+                'source'           => 'dictionary',
+                'interpreted'      => sprintf( __( 'Showing results for: %s', 'smartsearch-ai' ), implode( ', ', array_slice( $service_names, 0, 3 ) ) ),
+                'query'            => $query,
+                'original_query'   => $query,
+                'confidence'       => $confidence,
             );
         }
 
@@ -82,11 +89,13 @@ class SSAI_Search_Engine {
         do_action( 'ssai_search_performed', $query, 'keyword', array() );
 
         return array(
-            'services'    => array(),
-            'posts'       => $posts,
-            'source'      => 'keyword',
-            'interpreted' => sprintf( __( 'Keyword search: %s', 'smartsearch-ai' ), $query ),
-            'query'       => $query,
+            'matched_services' => array(),
+            'posts'            => $posts,
+            'source'           => 'keyword',
+            'interpreted'      => sprintf( __( 'Keyword search: %s', 'smartsearch-ai' ), $query ),
+            'query'            => $query,
+            'original_query'   => $query,
+            'confidence'       => 'none',
         );
     }
 
@@ -137,7 +146,7 @@ class SSAI_Search_Engine {
             'post_type'      => $post_types,
             'post_status'    => 'publish',
             'posts_per_page' => $limit,
-            's'              => implode( ' ', $service_names ),
+            's'              => $service_names[0],
         );
 
         $tax_query = array();
@@ -185,6 +194,47 @@ class SSAI_Search_Engine {
         }
 
         return $posts;
+    }
+
+    /**
+     * Build deduplicated matched_services array from dictionary results.
+     */
+    private function build_matched_services( $dict_results, $max = 3 ) {
+        $services = array();
+        $seen     = array();
+
+        foreach ( $dict_results as $result ) {
+            $service = $result['service'];
+            if ( isset( $seen[ $service['id'] ] ) ) {
+                continue;
+            }
+            $seen[ $service['id'] ] = true;
+
+            $services[] = array(
+                'name'     => $service['name'],
+                'category' => isset( $service['category'] ) ? $service['category'] : '',
+                'score'    => $result['score'],
+            );
+
+            if ( count( $services ) >= $max ) {
+                break;
+            }
+        }
+
+        return $services;
+    }
+
+    /**
+     * Convert a numeric score to a confidence level.
+     */
+    private function score_to_confidence( $score ) {
+        if ( $score >= 100 ) {
+            return 'high';
+        }
+        if ( $score >= 50 ) {
+            return 'medium';
+        }
+        return 'low';
     }
 
     /**

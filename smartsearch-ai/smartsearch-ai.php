@@ -130,6 +130,13 @@ final class SmartSearch_AI {
             'placeholder'    => isset( $options['placeholder'] ) ? $options['placeholder'] : __( 'Describe what you need help with...', 'smartsearch-ai' ),
             'noResultsText'  => isset( $options['no_results_text'] ) ? $options['no_results_text'] : __( 'No matching services found. Try describing your problem differently.', 'smartsearch-ai' ),
             'searchingText'  => __( 'Searching...', 'smartsearch-ai' ),
+            'exampleQueries' => array(
+                __( 'my toilet won\'t stop running', 'smartsearch-ai' ),
+                __( 'no hot water', 'smartsearch-ai' ),
+                __( 'pipe is leaking', 'smartsearch-ai' ),
+                __( 'drain is clogged', 'smartsearch-ai' ),
+                __( 'need emergency plumber', 'smartsearch-ai' ),
+            ),
             'aiEnabled'      => ! empty( $options['openai_api_key'] ) && ! empty( $options['ai_fallback'] ),
             'debounceMs'     => 200,
             'isPro'          => self::is_pro(),

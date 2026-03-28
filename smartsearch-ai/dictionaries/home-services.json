@@ -1,58 +1,315 @@
 {
   "meta": {
-    "industry": "Home Services",
-    "version": "1.0.0",
-    "description": "Comprehensive home services dictionary covering plumbing, HVAC, electrical, roofing, landscaping, cleaning, pest control, and more.",
+    "industry": "Plumbing Services - Atlanta",
+    "version": "1.1.0",
+    "description": "Plumbing services dictionary tailored for Plumbers of Atlanta. Service names match site subtrade taxonomy and landing page titles.",
     "last_updated": "2026-03-27"
   },
   "services": [
     {
-      "id": "pipe-repair",
-      "name": "Pipe Repair",
+      "id": "bathroom-plumbing-remodeling",
+      "name": "Bathroom Plumbing Remodeling",
       "category": "Plumbing",
-      "synonyms": ["pipe fix", "broken pipe", "pipe burst", "burst pipe", "cracked pipe", "pipe replacement", "repiping"],
+      "synonyms": ["bathroom remodel", "bathroom renovation", "bathroom plumbing", "bath remodel", "shower remodel", "tub remodel", "bathroom upgrade"],
       "intents": [
-        "water leaking from wall",
-        "water coming through ceiling",
-        "pipe froze and burst",
-        "water spraying under sink",
-        "water stain on ceiling",
-        "hear water running but nothing is on",
-        "pipe is making banging noise",
-        "water pressure dropped suddenly",
-        "wet spot on wall",
-        "water damage from pipe",
-        "copper pipe has green stuff on it",
-        "pipe is corroded",
-        "water bill is really high suddenly"
+        "remodeling my bathroom",
+        "need plumbing for a bathroom renovation",
+        "moving the toilet to a different spot",
+        "adding a second bathroom",
+        "converting tub to walk-in shower",
+        "want a new bathroom layout",
+        "bathroom needs to be gutted and redone",
+        "updating old bathroom fixtures",
+        "want a double vanity installed"
       ],
-      "keywords": ["pipe", "leak", "burst", "water damage", "copper pipe", "PVC", "water line", "supply line", "plumbing"]
+      "keywords": ["bathroom", "remodel", "renovation", "bath", "vanity", "shower conversion", "tub", "bathroom upgrade"]
     },
     {
-      "id": "faucet-repair",
-      "name": "Faucet Repair & Installation",
+      "id": "burst-pipe-repair",
+      "name": "Burst Pipe Repair",
       "category": "Plumbing",
-      "synonyms": ["faucet fix", "faucet replacement", "tap repair", "faucet install", "kitchen faucet", "bathroom faucet", "leaky faucet"],
+      "synonyms": ["broken pipe", "pipe burst", "cracked pipe", "ruptured pipe", "split pipe", "busted pipe"],
+      "intents": [
+        "pipe burst in the wall",
+        "water spraying everywhere",
+        "pipe froze and burst",
+        "water gushing from a pipe",
+        "pipe cracked overnight",
+        "water shooting out of the wall",
+        "pipe exploded under the house",
+        "emergency pipe leak",
+        "water flooding from a broken pipe",
+        "water coming from the wall",
+        "water coming out of wall",
+        "water leaking from wall",
+        "my pipe broke",
+        "pipe broke",
+        "pipe is broken",
+        "broken pipe in my house"
+      ],
+      "keywords": ["burst", "broken pipe", "pipe break", "ruptured", "cracked pipe", "water gushing", "emergency pipe", "water from wall"]
+    },
+    {
+      "id": "camera-inspection",
+      "name": "Camera Inspection of Drains & Sewers",
+      "category": "Plumbing",
+      "synonyms": ["sewer camera", "drain camera", "pipe camera", "video inspection", "sewer scope", "pipe inspection", "plumbing camera"],
+      "intents": [
+        "want to see what's blocking the drain",
+        "need a camera down the sewer line",
+        "buying a house and need sewer inspection",
+        "want to find where the pipe is broken",
+        "recurring clogs need to find the cause",
+        "realtor wants a sewer scope",
+        "need to locate a pipe underground"
+      ],
+      "keywords": ["camera", "inspection", "video", "sewer scope", "drain camera", "pipe camera", "locate"]
+    },
+    {
+      "id": "drain-cleaning",
+      "name": "Drain Cleaning & Clog Removal",
+      "category": "Plumbing",
+      "synonyms": ["drain unclog", "clogged drain", "drain clearing", "drain snaking", "drain rooter", "clog removal", "blocked drain"],
+      "intents": [
+        "sink is draining slowly",
+        "bathtub won't drain",
+        "shower is backing up",
+        "standing water in the sink",
+        "bad smell coming from drain",
+        "all drains are slow",
+        "basement drain is backed up",
+        "kitchen sink is clogged",
+        "hair clogging the shower drain",
+        "gurgling sound from drain",
+        "drain keeps getting clogged"
+      ],
+      "keywords": ["drain", "clog", "slow drain", "backup", "snake", "rooter", "blockage", "standing water", "unclog"]
+    },
+    {
+      "id": "emergency-plumbing",
+      "name": "Emergency Plumbing Service",
+      "category": "Plumbing",
+      "synonyms": ["emergency plumber", "24 hour plumber", "urgent plumbing", "plumbing emergency", "after hours plumber", "weekend plumber"],
+      "intents": [
+        "need a plumber right now",
+        "plumbing emergency in the middle of the night",
+        "water is flooding my house",
+        "pipe burst and I need help now",
+        "toilet overflowing won't stop",
+        "sewage backing up into the house",
+        "no water in the house",
+        "gas smell from plumbing",
+        "need an emergency plumber on Sunday",
+        "emergency job water coming from wall",
+        "water emergency need help now",
+        "plumbing emergency water everywhere"
+      ],
+      "keywords": ["emergency", "urgent", "24 hour", "immediate", "right now", "after hours", "weekend", "ASAP", "emergency job"]
+    },
+    {
+      "id": "faucet-fixture",
+      "name": "Faucet & Fixture Installation",
+      "category": "Plumbing",
+      "synonyms": ["faucet install", "faucet repair", "fixture installation", "tap repair", "faucet replacement", "kitchen faucet", "bathroom faucet", "leaky faucet", "faucet fix", "spigot install", "spigot repair", "outdoor spigot", "hose bib", "hose spigot", "outdoor faucet"],
       "intents": [
         "faucet is dripping",
         "faucet won't turn off",
-        "no water coming out of faucet",
-        "water not coming out of the faucet",
+        "want to replace my kitchen faucet",
         "faucet handle broke off",
         "faucet is loose and wobbly",
-        "want to replace my kitchen faucet",
+        "no water coming out of faucet",
         "hot water not working at the sink",
         "faucet sprays water everywhere",
         "low water pressure at the faucet",
-        "faucet makes noise when turned on"
+        "want a new bathroom faucet installed",
+        "need a touchless faucet installed",
+        "need to install a spigot",
+        "outdoor spigot is leaking",
+        "hose bib is broken",
+        "need a new outdoor faucet",
+        "spigot won't turn off"
       ],
-      "keywords": ["faucet", "tap", "spigot", "sink", "drip", "handle", "cartridge", "aerator"]
+      "keywords": ["faucet", "fixture", "tap", "spigot", "sink", "drip", "handle", "cartridge", "aerator", "hose bib", "outdoor faucet"]
+    },
+    {
+      "id": "garbage-disposal",
+      "name": "Garbage Disposal Repair & Installation",
+      "category": "Plumbing",
+      "synonyms": ["garbage disposal fix", "disposal repair", "disposal replacement", "disposal install", "InSinkErator", "garbage disposal not working"],
+      "intents": [
+        "garbage disposal is humming but not working",
+        "disposal is jammed",
+        "garbage disposal is leaking",
+        "disposal makes loud grinding noise",
+        "want a new garbage disposal installed",
+        "disposal stopped working",
+        "garbage disposal smells terrible",
+        "disposal won't turn on"
+      ],
+      "keywords": ["garbage disposal", "disposal", "InSinkErator", "food waste", "kitchen disposal"]
+    },
+    {
+      "id": "gas-line",
+      "name": "Gas Line Installation & Repair",
+      "category": "Plumbing",
+      "synonyms": ["gas line repair", "gas pipe", "gas leak repair", "gas line install", "natural gas", "gas fitting"],
+      "intents": [
+        "smell gas in the house",
+        "need a gas line for the stove",
+        "gas line for outdoor grill",
+        "want to convert from electric to gas",
+        "gas line to the dryer",
+        "need gas line for a fire pit",
+        "gas leak detected",
+        "gas line for a tankless water heater"
+      ],
+      "keywords": ["gas line", "gas pipe", "natural gas", "gas leak", "gas fitting", "propane", "gas valve"]
+    },
+    {
+      "id": "hydro-jetting",
+      "name": "Hydro Jetting Services",
+      "category": "Plumbing",
+      "synonyms": ["hydro jet", "water jetting", "high pressure drain cleaning", "jetting service", "sewer jetting", "power jetting"],
+      "intents": [
+        "grease buildup in the drain",
+        "tree roots in the sewer line",
+        "drains keep getting clogged",
+        "need heavy duty drain cleaning",
+        "restaurant drain is clogged with grease",
+        "main line keeps backing up",
+        "need more than just snaking"
+      ],
+      "keywords": ["hydro jetting", "jetting", "high pressure", "water jet", "grease", "tree roots", "main line"]
+    },
+    {
+      "id": "kitchen-plumbing",
+      "name": "Kitchen Plumbing Services",
+      "category": "Plumbing",
+      "synonyms": ["kitchen plumber", "kitchen plumbing", "kitchen sink", "kitchen remodel plumbing", "kitchen drain"],
+      "intents": [
+        "kitchen sink is leaking",
+        "need plumbing for kitchen remodel",
+        "kitchen faucet is dripping",
+        "want a pot filler installed",
+        "dishwasher hookup needed",
+        "kitchen drain smells bad",
+        "under sink pipes are leaking",
+        "want an instant hot water tap",
+        "kitchen sink backing up"
+      ],
+      "keywords": ["kitchen", "sink", "kitchen plumbing", "dishwasher", "pot filler", "kitchen drain", "garbage disposal"]
+    },
+    {
+      "id": "leak-detection",
+      "name": "Leak Detection & Repair",
+      "category": "Plumbing",
+      "synonyms": ["leak repair", "water leak", "find a leak", "leak detection", "hidden leak", "slab leak"],
+      "intents": [
+        "water bill is really high suddenly",
+        "hear water running but nothing is on",
+        "wet spot on the floor but no visible leak",
+        "water meter keeps spinning",
+        "water stain on ceiling",
+        "mold growing from hidden water",
+        "foundation is wet on one side",
+        "hot spot on the floor could be slab leak",
+        "need someone to find where the leak is"
+      ],
+      "keywords": ["leak", "detection", "water leak", "slab leak", "hidden leak", "water bill", "moisture"]
+    },
+    {
+      "id": "pipe-repair-repiping",
+      "name": "Pipe Repair & Re-Piping",
+      "category": "Plumbing",
+      "synonyms": ["pipe fix", "repiping", "pipe replacement", "re-pipe", "copper pipe", "PEX pipe", "pipe repair"],
+      "intents": [
+        "pipes are old and corroded",
+        "water is brown from old pipes",
+        "want to replace galvanized pipes",
+        "low water pressure throughout the house",
+        "pipes keep leaking in different spots",
+        "lead pipes need replacing",
+        "upgrading to PEX piping",
+        "pinhole leaks in copper pipes",
+        "pipe is corroded and green"
+      ],
+      "keywords": ["pipe", "re-pipe", "repiping", "copper", "PEX", "galvanized", "corrosion", "replacement"]
+    },
+    {
+      "id": "sewer-line",
+      "name": "Sewer Line Repair & Replacement",
+      "category": "Plumbing",
+      "synonyms": ["sewer repair", "sewer replacement", "main sewer line", "trenchless sewer", "sewer fix", "sewer line broken"],
+      "intents": [
+        "sewage backing up into house",
+        "raw sewage in the yard",
+        "tree roots in sewer line",
+        "multiple drains clogged at once",
+        "sewage smell outside",
+        "sinkhole in the yard near sewer",
+        "toilet and shower both backing up",
+        "sewer line collapsed"
+      ],
+      "keywords": ["sewer", "sewer line", "main line", "tree roots", "trenchless", "sewer camera", "sewage", "backup"]
+    },
+    {
+      "id": "shower-bathtub",
+      "name": "Shower & Bathtub Installation",
+      "category": "Plumbing",
+      "synonyms": ["shower install", "bathtub install", "tub replacement", "shower replacement", "shower repair", "tub repair", "walk-in shower"],
+      "intents": [
+        "want a new shower installed",
+        "bathtub is cracked",
+        "converting bathtub to shower",
+        "want a walk-in shower",
+        "shower is leaking behind the wall",
+        "tub faucet is dripping",
+        "shower head has no pressure",
+        "want a rain shower head installed",
+        "bathtub drain is slow",
+        "need a new tub surround"
+      ],
+      "keywords": ["shower", "bathtub", "tub", "walk-in shower", "shower head", "tub surround", "shower valve", "shower door"]
+    },
+    {
+      "id": "sump-pump",
+      "name": "Sump Pump Installation & Repair",
+      "category": "Plumbing",
+      "synonyms": ["sump pump fix", "sump pump replacement", "sump pump install", "backup sump pump", "sump pump not working"],
+      "intents": [
+        "sump pump stopped working",
+        "basement flooding during rain",
+        "sump pump running constantly",
+        "need a backup sump pump",
+        "sump pump is making noise",
+        "water in the basement",
+        "crawl space is wet need a sump pump",
+        "sump pump keeps cycling on and off"
+      ],
+      "keywords": ["sump pump", "basement", "flooding", "backup pump", "battery backup", "float switch", "discharge"]
+    },
+    {
+      "id": "tankless-water-heater",
+      "name": "Tankless Water Heater Installation",
+      "category": "Plumbing",
+      "synonyms": ["tankless install", "on-demand water heater", "tankless hot water", "instant hot water", "tankless conversion"],
+      "intents": [
+        "want to switch to tankless",
+        "interested in a tankless water heater",
+        "want endless hot water",
+        "tankless water heater not heating",
+        "cost of tankless water heater",
+        "tankless vs traditional water heater",
+        "want to save space with tankless",
+        "need a tankless water heater for the whole house"
+      ],
+      "keywords": ["tankless", "on-demand", "instant hot water", "Rinnai", "Navien", "Noritz", "tankless conversion"]
     },
     {
       "id": "toilet-repair",
       "name": "Toilet Repair & Installation",
       "category": "Plumbing",
-      "synonyms": ["toilet fix", "toilet replacement", "toilet install", "commode repair", "toilet running"],
+      "synonyms": ["toilet fix", "toilet replacement", "toilet install", "commode repair", "toilet running", "toilet clogged"],
       "intents": [
         "toilet won't stop running",
         "toilet keeps flushing by itself",
@@ -64,37 +321,34 @@
         "toilet is rocking back and forth",
         "toilet handle is broken",
         "want a new toilet installed",
-        "toilet makes loud noise after flushing",
-        "toilet bowl water level is low"
+        "toilet makes loud noise after flushing"
       ],
-      "keywords": ["toilet", "commode", "flush", "clog", "overflow", "flapper", "wax ring", "fill valve"]
+      "keywords": ["toilet", "commode", "flush", "clog", "overflow", "flapper", "wax ring", "fill valve", "running toilet"]
     },
     {
-      "id": "drain-cleaning",
-      "name": "Drain Cleaning",
+      "id": "water-filtration",
+      "name": "Water Filtration & Softener Systems",
       "category": "Plumbing",
-      "synonyms": ["drain unclog", "clogged drain", "drain clearing", "drain snaking", "sewer cleaning", "drain rooter"],
+      "synonyms": ["water filter", "water softener", "water purification", "whole house filter", "reverse osmosis", "water treatment", "water quality"],
       "intents": [
-        "sink is draining slowly",
-        "bathtub won't drain",
-        "shower is backing up",
-        "standing water in the sink",
-        "bad smell coming from drain",
-        "sewage smell in the house",
-        "all drains are slow",
-        "basement drain is backed up",
-        "kitchen sink is clogged",
-        "hair clogging the shower drain",
-        "garbage disposal clogged the sink",
-        "gurgling sound from drain"
+        "water tastes bad",
+        "hard water staining everything",
+        "want a whole house water filter",
+        "water has chlorine smell",
+        "want reverse osmosis under the sink",
+        "hard water ruining the fixtures",
+        "water spots on everything",
+        "want softer water",
+        "concerned about water quality",
+        "well water needs treatment"
       ],
-      "keywords": ["drain", "clog", "slow drain", "backup", "sewer", "snake", "rooter", "blockage", "standing water"]
+      "keywords": ["water filter", "water softener", "filtration", "reverse osmosis", "hard water", "water treatment", "water quality", "purification"]
     },
     {
       "id": "water-heater",
       "name": "Water Heater Repair & Installation",
       "category": "Plumbing",
-      "synonyms": ["hot water heater", "water heater fix", "tankless water heater", "water heater replacement", "boiler repair"],
+      "synonyms": ["hot water heater", "water heater fix", "water heater replacement", "water heater install", "hot water tank"],
       "intents": [
         "no hot water",
         "water heater is leaking",
@@ -102,708 +356,29 @@
         "water is only lukewarm",
         "water heater making popping noise",
         "pilot light keeps going out",
-        "want to switch to tankless",
         "water heater is old and needs replacing",
         "rusty water from hot water tap",
         "water smells like rotten eggs",
-        "water heater thermostat not working"
+        "need a new water heater installed"
       ],
-      "keywords": ["water heater", "hot water", "tankless", "boiler", "pilot light", "thermostat", "anode rod", "heating element"]
+      "keywords": ["water heater", "hot water", "tank", "pilot light", "thermostat", "anode rod", "heating element", "hot water tank"]
     },
     {
-      "id": "outdoor-plumbing",
-      "name": "Outdoor Plumbing",
+      "id": "water-line",
+      "name": "Water Line Repair & Replacement",
       "category": "Plumbing",
-      "synonyms": ["hose bib repair", "outdoor faucet", "sprinkler repair", "spigot installation", "yard plumbing"],
+      "synonyms": ["water line fix", "main water line", "water service line", "water pipe replacement", "water main repair"],
       "intents": [
-        "need a spigot installed outside",
-        "outdoor faucet is leaking",
-        "hose bib froze and broke",
-        "want to add an outdoor water line",
-        "sprinkler system leaking",
-        "need water line to the garden",
-        "outdoor faucet won't turn on",
-        "install a spigot near the garden",
-        "backflow preventer needs repair"
+        "main water line is leaking",
+        "low water pressure in the whole house",
+        "water line from the street is old",
+        "yard is soggy near the water line",
+        "water main break",
+        "need water line replaced to the house",
+        "lead water line needs replacing",
+        "water line is corroded"
       ],
-      "keywords": ["spigot", "hose bib", "outdoor faucet", "sprinkler", "backflow", "irrigation", "yard hydrant"]
-    },
-    {
-      "id": "sewer-line",
-      "name": "Sewer Line Repair",
-      "category": "Plumbing",
-      "synonyms": ["sewer repair", "main sewer line", "sewer replacement", "trenchless sewer repair", "sewer camera inspection"],
-      "intents": [
-        "sewage backing up into house",
-        "raw sewage in the yard",
-        "tree roots in sewer line",
-        "multiple drains clogged at once",
-        "sewage smell outside the house",
-        "sinkhole in the yard",
-        "toilet and shower both backing up",
-        "septic tank overflowing"
-      ],
-      "keywords": ["sewer", "sewer line", "main line", "septic", "tree roots", "trenchless", "sewer camera"]
-    },
-    {
-      "id": "ac-repair",
-      "name": "AC Repair",
-      "category": "HVAC",
-      "synonyms": ["air conditioning repair", "AC fix", "central air repair", "AC not working", "air conditioner repair", "cooling repair"],
-      "intents": [
-        "AC blowing warm air",
-        "air conditioner not cooling",
-        "AC won't turn on",
-        "house is too hot",
-        "AC is making weird noise",
-        "ice on the AC unit",
-        "AC keeps turning on and off",
-        "AC unit is frozen",
-        "AC is leaking water inside",
-        "musty smell from AC vents",
-        "electric bill went up because of AC",
-        "air coming from vents is weak",
-        "thermostat says cool but no air",
-        "AC running but not cooling house"
-      ],
-      "keywords": ["AC", "air conditioning", "cooling", "compressor", "condenser", "refrigerant", "freon", "evaporator", "HVAC"]
-    },
-    {
-      "id": "heating-repair",
-      "name": "Heating System Repair",
-      "category": "HVAC",
-      "synonyms": ["furnace repair", "heater repair", "heat pump repair", "boiler repair", "heating fix", "furnace not working"],
-      "intents": [
-        "furnace won't turn on",
-        "no heat coming from vents",
-        "house is freezing cold",
-        "heater blowing cold air",
-        "furnace making loud banging noise",
-        "furnace keeps shutting off",
-        "pilot light won't stay lit",
-        "burning smell from the furnace",
-        "heat pump not heating",
-        "radiator is cold",
-        "thermostat set to heat but nothing happens",
-        "furnace running but house not getting warm"
-      ],
-      "keywords": ["furnace", "heater", "heat pump", "boiler", "heating", "pilot light", "ignitor", "blower motor", "HVAC"]
-    },
-    {
-      "id": "hvac-installation",
-      "name": "HVAC Installation",
-      "category": "HVAC",
-      "synonyms": ["AC installation", "furnace installation", "new HVAC system", "central air installation", "heat pump installation", "mini split installation"],
-      "intents": [
-        "need a new AC unit installed",
-        "want central air in my home",
-        "upgrading my HVAC system",
-        "replacing old furnace",
-        "want a mini split for an addition",
-        "building a new house need HVAC",
-        "converting from window units to central air",
-        "want a ductless system installed"
-      ],
-      "keywords": ["HVAC install", "AC install", "furnace install", "heat pump", "mini split", "ductless", "central air", "new system"]
-    },
-    {
-      "id": "duct-cleaning",
-      "name": "Duct Cleaning & Repair",
-      "category": "HVAC",
-      "synonyms": ["air duct cleaning", "ductwork repair", "vent cleaning", "HVAC duct cleaning"],
-      "intents": [
-        "dust coming from vents",
-        "air ducts are dirty",
-        "allergies getting worse indoors",
-        "musty smell when AC turns on",
-        "uneven heating in the house",
-        "some rooms are hotter than others",
-        "air flow is weak from one vent",
-        "haven't cleaned ducts in years"
-      ],
-      "keywords": ["ducts", "ductwork", "vents", "air ducts", "duct cleaning", "air quality", "HVAC ducts"]
-    },
-    {
-      "id": "thermostat",
-      "name": "Thermostat Installation & Repair",
-      "category": "HVAC",
-      "synonyms": ["thermostat fix", "smart thermostat install", "thermostat replacement", "programmable thermostat"],
-      "intents": [
-        "thermostat not working",
-        "temperature reading is wrong",
-        "want to install a Nest thermostat",
-        "thermostat screen is blank",
-        "AC and heat both running at same time",
-        "want to upgrade to a smart thermostat",
-        "thermostat won't connect to wifi"
-      ],
-      "keywords": ["thermostat", "Nest", "Ecobee", "Honeywell", "smart thermostat", "temperature control", "programmable"]
-    },
-    {
-      "id": "electrical-repair",
-      "name": "Electrical Repair",
-      "category": "Electrical",
-      "synonyms": ["electrician", "electrical fix", "wiring repair", "electrical troubleshooting"],
-      "intents": [
-        "outlet stopped working",
-        "lights flickering in the house",
-        "breaker keeps tripping",
-        "sparks coming from outlet",
-        "burning smell from electrical panel",
-        "power went out in one room",
-        "outlet is hot to the touch",
-        "half my house has no power",
-        "light switch not working",
-        "buzzing sound from the wall"
-      ],
-      "keywords": ["electrical", "wiring", "outlet", "switch", "breaker", "circuit", "electrician", "voltage", "wire"]
-    },
-    {
-      "id": "electrical-panel",
-      "name": "Electrical Panel Upgrade",
-      "category": "Electrical",
-      "synonyms": ["panel upgrade", "breaker box upgrade", "electrical panel replacement", "fuse box upgrade", "service upgrade"],
-      "intents": [
-        "breaker box is old and rusty",
-        "need more circuits for renovation",
-        "still have a fuse box",
-        "panel is making buzzing noise",
-        "want to add a subpanel in garage",
-        "electrician said I need a panel upgrade",
-        "insurance company wants me to upgrade panel",
-        "converting to 200 amp service"
-      ],
-      "keywords": ["panel", "breaker box", "fuse box", "200 amp", "service upgrade", "subpanel", "main panel"]
-    },
-    {
-      "id": "lighting-install",
-      "name": "Lighting Installation",
-      "category": "Electrical",
-      "synonyms": ["light fixture install", "recessed lighting", "LED install", "chandelier install", "can lights"],
-      "intents": [
-        "want recessed lights in living room",
-        "need outdoor lights installed",
-        "replace a chandelier",
-        "install under cabinet lighting",
-        "need landscape lighting",
-        "want motion sensor lights outside",
-        "installing lights in the garage",
-        "LED conversion for the whole house"
-      ],
-      "keywords": ["lighting", "light fixture", "recessed", "LED", "chandelier", "sconce", "can light", "flood light"]
-    },
-    {
-      "id": "ceiling-fan",
-      "name": "Ceiling Fan Installation",
-      "category": "Electrical",
-      "synonyms": ["fan install", "ceiling fan repair", "fan replacement"],
-      "intents": [
-        "want a ceiling fan in bedroom",
-        "ceiling fan wobbles",
-        "ceiling fan stopped working",
-        "replace ceiling fan with light fixture",
-        "fan making clicking noise",
-        "want a fan on the patio"
-      ],
-      "keywords": ["ceiling fan", "fan", "fan installation", "wobble", "fan motor"]
-    },
-    {
-      "id": "generator",
-      "name": "Generator Installation & Repair",
-      "category": "Electrical",
-      "synonyms": ["standby generator", "backup generator", "generator install", "Generac", "whole house generator"],
-      "intents": [
-        "want backup power for storms",
-        "need a generator for the house",
-        "power goes out too often",
-        "generator won't start",
-        "want automatic backup power",
-        "hurricane preparedness power backup"
-      ],
-      "keywords": ["generator", "backup power", "standby", "Generac", "transfer switch", "emergency power"]
-    },
-    {
-      "id": "roof-repair",
-      "name": "Roof Repair",
-      "category": "Roofing",
-      "synonyms": ["roof fix", "roof leak repair", "shingle repair", "roof patch", "roof maintenance"],
-      "intents": [
-        "roof is leaking",
-        "water coming through the roof",
-        "missing shingles after storm",
-        "water stain on ceiling from roof",
-        "shingles are curling up",
-        "roof looks saggy",
-        "ice dam on the roof",
-        "flashing around chimney is leaking",
-        "storm damage to roof",
-        "can see daylight through the roof"
-      ],
-      "keywords": ["roof", "shingle", "leak", "flashing", "gutter", "soffit", "fascia", "roof deck"]
-    },
-    {
-      "id": "roof-replacement",
-      "name": "Roof Replacement",
-      "category": "Roofing",
-      "synonyms": ["new roof", "re-roof", "full roof replacement", "roof install"],
-      "intents": [
-        "roof is 20 years old needs replacing",
-        "insurance said I need a new roof",
-        "want to upgrade to metal roofing",
-        "roof has too many layers of shingles",
-        "getting a new roof for insurance",
-        "selling my house and need new roof"
-      ],
-      "keywords": ["roof replacement", "new roof", "re-roof", "metal roof", "asphalt shingle", "tile roof"]
-    },
-    {
-      "id": "gutter-service",
-      "name": "Gutter Installation & Cleaning",
-      "category": "Roofing",
-      "synonyms": ["gutter repair", "gutter cleaning", "gutter guards", "downspout repair", "seamless gutters"],
-      "intents": [
-        "gutters are overflowing",
-        "water pouring over the gutters",
-        "gutters are pulling away from house",
-        "need gutter guards installed",
-        "downspout is disconnected",
-        "water pooling around foundation",
-        "ice forming in gutters",
-        "leaves clogging gutters"
-      ],
-      "keywords": ["gutter", "downspout", "gutter guard", "leaf guard", "seamless gutter", "gutter cleaning"]
-    },
-    {
-      "id": "painting-interior",
-      "name": "Interior Painting",
-      "category": "Painting",
-      "synonyms": ["house painting inside", "room painting", "interior paint", "wall painting"],
-      "intents": [
-        "want to repaint the living room",
-        "walls need a fresh coat of paint",
-        "paint is peeling on the walls",
-        "want to change the color of a room",
-        "ceiling needs painting",
-        "need the whole house painted inside",
-        "drywall was repaired and needs paint",
-        "wallpaper removed and walls need paint"
-      ],
-      "keywords": ["paint", "painting", "interior", "walls", "ceiling", "primer", "trim painting"]
-    },
-    {
-      "id": "painting-exterior",
-      "name": "Exterior Painting",
-      "category": "Painting",
-      "synonyms": ["house painting outside", "exterior paint", "siding painting", "deck staining"],
-      "intents": [
-        "house exterior needs painting",
-        "paint is peeling on the outside",
-        "want to change the color of my house",
-        "wood siding needs staining",
-        "fence needs painting",
-        "deck needs to be stained",
-        "trim on the house is fading"
-      ],
-      "keywords": ["exterior paint", "house painting", "siding", "staining", "deck stain", "trim", "pressure wash"]
-    },
-    {
-      "id": "lawn-care",
-      "name": "Lawn Care & Mowing",
-      "category": "Landscaping",
-      "synonyms": ["lawn mowing", "grass cutting", "lawn maintenance", "yard work", "lawn service"],
-      "intents": [
-        "grass is overgrown",
-        "need someone to mow the lawn",
-        "lawn looks patchy and brown",
-        "weeds taking over the yard",
-        "want regular lawn maintenance",
-        "yard is a mess and needs cleanup",
-        "need lawn fertilizing",
-        "grass won't grow in some areas"
-      ],
-      "keywords": ["lawn", "grass", "mowing", "yard", "weed", "fertilizer", "aeration", "seeding", "sod"]
-    },
-    {
-      "id": "tree-service",
-      "name": "Tree Service",
-      "category": "Landscaping",
-      "synonyms": ["tree removal", "tree trimming", "tree cutting", "stump removal", "arborist"],
-      "intents": [
-        "tree fell on my property",
-        "dead tree needs to come down",
-        "branches hanging over the house",
-        "tree roots damaging the driveway",
-        "need a stump ground down",
-        "tree is leaning dangerously",
-        "storm knocked down a tree",
-        "trees blocking too much sunlight"
-      ],
-      "keywords": ["tree", "stump", "branches", "trimming", "removal", "arborist", "pruning"]
-    },
-    {
-      "id": "landscaping-design",
-      "name": "Landscaping & Hardscaping",
-      "category": "Landscaping",
-      "synonyms": ["landscape design", "patio install", "retaining wall", "hardscaping", "garden design", "outdoor living"],
-      "intents": [
-        "want a patio in the backyard",
-        "need a retaining wall built",
-        "want to redo the front yard landscaping",
-        "need a walkway to the front door",
-        "want to build an outdoor kitchen",
-        "drainage problem in the yard",
-        "backyard is just dirt and needs help",
-        "want a fire pit area"
-      ],
-      "keywords": ["landscaping", "patio", "retaining wall", "pavers", "walkway", "garden", "hardscape", "outdoor living"]
-    },
-    {
-      "id": "house-cleaning",
-      "name": "House Cleaning",
-      "category": "Cleaning",
-      "synonyms": ["home cleaning", "maid service", "cleaning service", "deep cleaning", "move-out cleaning"],
-      "intents": [
-        "need someone to clean my house",
-        "moving out and need deep cleaning",
-        "want regular weekly cleaning",
-        "house is too dirty to clean myself",
-        "need a one-time deep clean",
-        "preparing house for sale need it spotless",
-        "need post-construction cleaning"
-      ],
-      "keywords": ["cleaning", "house cleaning", "maid", "deep clean", "move-out", "post-construction", "sanitize"]
-    },
-    {
-      "id": "carpet-cleaning",
-      "name": "Carpet Cleaning",
-      "category": "Cleaning",
-      "synonyms": ["carpet wash", "steam cleaning", "upholstery cleaning", "rug cleaning"],
-      "intents": [
-        "carpets are stained",
-        "pet urine smell in carpet",
-        "carpet hasn't been cleaned in years",
-        "allergies from dirty carpet",
-        "red wine spill on carpet",
-        "want steam cleaning for carpets",
-        "rug needs professional cleaning"
-      ],
-      "keywords": ["carpet", "rug", "steam clean", "upholstery", "stain removal", "pet odor"]
-    },
-    {
-      "id": "pressure-washing",
-      "name": "Pressure Washing",
-      "category": "Cleaning",
-      "synonyms": ["power washing", "pressure cleaning", "soft washing", "exterior cleaning"],
-      "intents": [
-        "driveway is covered in mold",
-        "house siding looks green and dirty",
-        "deck is slippery with algae",
-        "sidewalk is stained",
-        "fence looks grimy",
-        "preparing house exterior for painting",
-        "roof has black streaks"
-      ],
-      "keywords": ["pressure wash", "power wash", "soft wash", "driveway", "siding", "mold", "algae"]
-    },
-    {
-      "id": "pest-control",
-      "name": "Pest Control",
-      "category": "Pest Control",
-      "synonyms": ["exterminator", "bug spray", "pest removal", "pest extermination", "pest treatment"],
-      "intents": [
-        "ants everywhere in the kitchen",
-        "cockroaches in the house",
-        "mice in the walls",
-        "heard something in the attic",
-        "termites eating the wood",
-        "bed bugs in the mattress",
-        "spiders all over the basement",
-        "wasp nest on the house",
-        "mosquitoes are terrible in the yard",
-        "rats in the garage",
-        "found droppings in the pantry",
-        "something chewing wires in the attic"
-      ],
-      "keywords": ["pest", "bug", "ant", "roach", "mouse", "rat", "termite", "bed bug", "wasp", "spider", "mosquito", "exterminator"]
-    },
-    {
-      "id": "wildlife-removal",
-      "name": "Wildlife Removal",
-      "category": "Pest Control",
-      "synonyms": ["animal removal", "critter removal", "wildlife control", "animal trapping"],
-      "intents": [
-        "raccoon in the attic",
-        "squirrels in the walls",
-        "skunk under the porch",
-        "bat in the house",
-        "possum in the garage",
-        "snake in the yard",
-        "bird nesting in the vent",
-        "groundhog digging up the yard"
-      ],
-      "keywords": ["wildlife", "raccoon", "squirrel", "bat", "possum", "skunk", "snake", "animal removal"]
-    },
-    {
-      "id": "garage-door",
-      "name": "Garage Door Repair & Installation",
-      "category": "General Home Repair",
-      "synonyms": ["garage door fix", "garage door opener", "garage door replacement", "garage door spring"],
-      "intents": [
-        "garage door won't open",
-        "garage door is stuck halfway",
-        "spring broke on garage door",
-        "garage door opener not working",
-        "garage door is making loud noise",
-        "garage door cable snapped",
-        "need a new garage door",
-        "garage door remote not working",
-        "garage door going up and down by itself"
-      ],
-      "keywords": ["garage door", "opener", "spring", "cable", "remote", "roller", "track"]
-    },
-    {
-      "id": "handyman",
-      "name": "Handyman Services",
-      "category": "General Home Repair",
-      "synonyms": ["general repair", "fix-it", "home repair", "maintenance man", "odd jobs"],
-      "intents": [
-        "need a few things fixed around the house",
-        "shelf needs to be hung",
-        "door won't close properly",
-        "need furniture assembled",
-        "drywall has a hole",
-        "molding came off the wall",
-        "cabinet door is loose",
-        "need a TV mounted",
-        "screen door is ripped",
-        "need weather stripping replaced",
-        "small repairs around the house"
-      ],
-      "keywords": ["handyman", "repair", "fix", "mount", "install", "assemble", "patch", "general"]
-    },
-    {
-      "id": "window-door",
-      "name": "Window & Door Installation",
-      "category": "General Home Repair",
-      "synonyms": ["window replacement", "door replacement", "window install", "door install", "window repair"],
-      "intents": [
-        "window is foggy between the glass",
-        "window won't stay open",
-        "draft coming from windows",
-        "window cracked or broken",
-        "want to upgrade to energy efficient windows",
-        "sliding door is hard to open",
-        "front door doesn't lock properly",
-        "need a storm door installed",
-        "screen is torn on the window"
-      ],
-      "keywords": ["window", "door", "glass", "frame", "draft", "energy efficient", "storm door", "sliding door"]
-    },
-    {
-      "id": "flooring",
-      "name": "Flooring Installation & Repair",
-      "category": "General Home Repair",
-      "synonyms": ["floor install", "hardwood floor", "tile install", "carpet install", "laminate floor", "vinyl flooring"],
-      "intents": [
-        "want new hardwood floors",
-        "tile is cracked and needs replacing",
-        "carpet is old and stained",
-        "floor is squeaking",
-        "water damaged the wood floor",
-        "want to install vinyl plank",
-        "basement floor needs covering",
-        "want heated floors in bathroom",
-        "grout is cracking between tiles"
-      ],
-      "keywords": ["flooring", "hardwood", "tile", "carpet", "laminate", "vinyl", "grout", "subfloor", "floor"]
-    },
-    {
-      "id": "drywall",
-      "name": "Drywall Repair & Installation",
-      "category": "General Home Repair",
-      "synonyms": ["sheetrock repair", "drywall patch", "wall repair", "drywall hanging", "plaster repair"],
-      "intents": [
-        "hole in the wall from a doorknob",
-        "water damaged the drywall",
-        "ceiling drywall is sagging",
-        "cracks in the walls",
-        "need drywall for a new room",
-        "plaster walls are crumbling",
-        "need to patch drywall after plumbing work",
-        "nail pops in the drywall"
-      ],
-      "keywords": ["drywall", "sheetrock", "plaster", "wall patch", "joint compound", "texture"]
-    },
-    {
-      "id": "fence",
-      "name": "Fence Installation & Repair",
-      "category": "General Home Repair",
-      "synonyms": ["fencing", "fence repair", "fence build", "privacy fence", "chain link fence", "gate repair"],
-      "intents": [
-        "fence blew down in the storm",
-        "need a privacy fence installed",
-        "fence posts are rotting",
-        "gate won't close properly",
-        "dog keeps getting out of the yard",
-        "want to replace chain link with wood fence",
-        "neighbor wants a fence between properties"
-      ],
-      "keywords": ["fence", "fencing", "gate", "privacy fence", "chain link", "wood fence", "post", "picket"]
-    },
-    {
-      "id": "appliance-repair",
-      "name": "Appliance Repair",
-      "category": "Appliances",
-      "synonyms": ["appliance fix", "washer repair", "dryer repair", "refrigerator repair", "dishwasher repair", "oven repair", "stove repair"],
-      "intents": [
-        "washer won't spin",
-        "dryer not heating",
-        "refrigerator not cooling",
-        "dishwasher leaking",
-        "oven not heating up",
-        "stove burner not working",
-        "ice maker broken",
-        "washing machine shaking violently",
-        "dryer making loud noise",
-        "need someone to hook up my gas dryer",
-        "freezer is icing up",
-        "microwave sparking inside"
-      ],
-      "keywords": ["appliance", "washer", "dryer", "refrigerator", "dishwasher", "oven", "stove", "microwave", "ice maker"]
-    },
-    {
-      "id": "locksmith",
-      "name": "Locksmith Services",
-      "category": "Security",
-      "synonyms": ["lock repair", "lock change", "lockout service", "key replacement", "rekey locks"],
-      "intents": [
-        "locked out of my house",
-        "need locks changed after moving in",
-        "key broke off in the lock",
-        "want to rekey all the locks",
-        "need a deadbolt installed",
-        "smart lock installation",
-        "lock is jammed",
-        "just moved in and want new locks"
-      ],
-      "keywords": ["locksmith", "lock", "key", "deadbolt", "rekey", "lockout", "smart lock"]
-    },
-    {
-      "id": "security-system",
-      "name": "Security System Installation",
-      "category": "Security",
-      "synonyms": ["home security", "alarm system", "camera installation", "surveillance system", "security cameras"],
-      "intents": [
-        "want security cameras installed",
-        "need a home alarm system",
-        "want to see who's at the front door",
-        "need a doorbell camera",
-        "want cameras around the property",
-        "need a monitored alarm system",
-        "want to install flood lights with cameras"
-      ],
-      "keywords": ["security", "camera", "alarm", "surveillance", "Ring", "doorbell camera", "motion sensor", "monitoring"]
-    },
-    {
-      "id": "insulation",
-      "name": "Insulation",
-      "category": "Energy & Insulation",
-      "synonyms": ["attic insulation", "wall insulation", "spray foam", "blown-in insulation", "insulation install"],
-      "intents": [
-        "house is too cold in winter",
-        "energy bills are really high",
-        "can feel drafts everywhere",
-        "attic needs more insulation",
-        "want spray foam insulation",
-        "crawl space is not insulated",
-        "ice dams keep forming",
-        "upstairs is always hotter than downstairs"
-      ],
-      "keywords": ["insulation", "attic", "spray foam", "blown-in", "fiberglass", "R-value", "energy efficiency", "draft"]
-    },
-    {
-      "id": "concrete",
-      "name": "Concrete Work",
-      "category": "General Home Repair",
-      "synonyms": ["concrete repair", "driveway repair", "sidewalk repair", "concrete pour", "foundation repair"],
-      "intents": [
-        "driveway is cracked",
-        "sidewalk is uneven and a tripping hazard",
-        "need a new concrete patio",
-        "garage floor is cracking",
-        "foundation has cracks",
-        "need concrete steps repaired",
-        "want a concrete driveway poured",
-        "basement walls have cracks"
-      ],
-      "keywords": ["concrete", "driveway", "sidewalk", "patio", "foundation", "slab", "crack", "pour"]
-    },
-    {
-      "id": "plumbing-general",
-      "name": "General Plumbing",
-      "category": "Plumbing",
-      "synonyms": ["plumber", "plumbing service", "plumbing work", "plumbing help"],
-      "intents": [
-        "need a plumber",
-        "plumbing issue",
-        "something is wrong with the plumbing",
-        "need plumbing for a renovation",
-        "bathroom remodel plumbing",
-        "kitchen remodel plumbing",
-        "sump pump not working",
-        "garbage disposal broken",
-        "gas line needs repair"
-      ],
-      "keywords": ["plumber", "plumbing", "sump pump", "garbage disposal", "gas line", "shut-off valve", "water main"]
-    },
-    {
-      "id": "mold-remediation",
-      "name": "Mold Remediation",
-      "category": "Cleaning",
-      "synonyms": ["mold removal", "mold testing", "mold inspection", "mildew removal"],
-      "intents": [
-        "black mold in the bathroom",
-        "musty smell in the basement",
-        "mold growing on the walls",
-        "found mold behind the drywall",
-        "mold after water damage",
-        "allergies from mold in house",
-        "crawl space has mold",
-        "mold in the attic"
-      ],
-      "keywords": ["mold", "mildew", "black mold", "remediation", "mold removal", "mold testing", "moisture"]
-    },
-    {
-      "id": "water-damage",
-      "name": "Water Damage Restoration",
-      "category": "Restoration",
-      "synonyms": ["flood damage", "water restoration", "water cleanup", "flood cleanup", "emergency water removal"],
-      "intents": [
-        "house flooded",
-        "basement is full of water",
-        "water damage from a burst pipe",
-        "need water pumped out of basement",
-        "carpet is soaked from a leak",
-        "ceiling collapsed from water",
-        "flooding from a storm",
-        "need emergency water extraction"
-      ],
-      "keywords": ["water damage", "flood", "restoration", "water extraction", "dehumidifier", "drying", "emergency"]
-    },
-    {
-      "id": "solar",
-      "name": "Solar Panel Installation",
-      "category": "Energy & Insulation",
-      "synonyms": ["solar install", "solar panels", "solar energy", "photovoltaic", "solar power"],
-      "intents": [
-        "want solar panels on my roof",
-        "interested in solar energy",
-        "electric bill is too high want solar",
-        "how much do solar panels cost",
-        "want to go off grid",
-        "need solar panel maintenance"
-      ],
-      "keywords": ["solar", "solar panel", "photovoltaic", "inverter", "net metering", "solar energy"]
+      "keywords": ["water line", "water main", "service line", "water pipe", "main line", "supply line", "water pressure"]
     }
   ]
 }

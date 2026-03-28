@@ -4,7 +4,7 @@
  * Production-quality jQuery-based search functionality with client-side Fuse.js
  * fuzzy searching and server-side full search with AJAX.
  *
- * Global config: ssaiConfig (not sssConfig)
+ * Global config: ssaiConfig
  * AJAX actions: ssai_get_index, ssai_autocomplete, ssai_search
  * Nonce field: nonce
  */
@@ -43,20 +43,51 @@
      * Initialize the widget
      */
     init: function () {
-      // Cache jQuery selectors
+      // Try plugin shortcode first, then fall back to theme search
       this.$wrapper = $('.ssai-search-wrapper');
-      this.$searchInput = $('.ssai-search-input', this.$wrapper);
-      this.$locationInput = $('.ssai-location-input', this.$wrapper);
-      this.$searchBtn = $('.ssai-search-btn', this.$wrapper);
-      this.$suggestionsBox = $('.ssai-suggestions', this.$wrapper);
-      this.$resultsContainer = $('.ssai-results', this.$wrapper);
+
+      if (this.$wrapper.length) {
+        // Plugin shortcode mode
+        this.$searchInput = $('.ssai-search-input', this.$wrapper);
+        this.$locationInput = $('.ssai-location-input', this.$wrapper);
+        this.$searchBtn = $('.ssai-search-btn', this.$wrapper);
+        this.$suggestionsBox = $('.ssai-suggestions', this.$wrapper);
+        this.$resultsContainer = $('.ssai-results', this.$wrapper);
+      } else {
+        // Theme integration mode — hook into existing theme search
+        var $themeForm = $('.wp-search-form');
+        if (!$themeForm.length) {
+          // Still inject search page banner if on search results page
+          this.renderSearchPageBanner();
+          return;
+        }
+        this.$wrapper = $themeForm.closest('form').length ? $themeForm.closest('form') : $themeForm;
+        this.$searchInput = $themeForm.find('.search-field');
+        this.$locationInput = $(); // no location in theme
+        this.$searchBtn = $themeForm.find('.search-submit');
+        this.$suggestionsBox = $themeForm.find('.search-results-live');
+        this.$resultsContainer = $themeForm.find('.search-results-live');
+        this.themeMode = true;
+
+        // Prevent default form submission — use AJAX search instead
+        this.$wrapper.on('submit', function (e) {
+          e.preventDefault();
+          SmartSearchAI.performSearch();
+        });
+      }
 
       // Fetch search index on load
       this.fetchSearchIndex();
 
       // Attach event listeners
       this.attachEventListeners();
+
+      // Render search page banner if on search results page
+      this.renderSearchPageBanner();
     },
+
+    // Flag for theme integration mode
+    themeMode: false,
 
     /**
      * Fetch the search index from the server via AJAX
@@ -74,7 +105,7 @@
         },
         success: function (response) {
           if (response.success && response.data) {
-            self.searchIndex = response.data;
+            self.searchIndex = response.data.index || response.data;
             self.initializeFuse();
           }
         },
@@ -90,8 +121,8 @@
     initializeFuse: function () {
       const fuseOptions = {
         keys: [
-          { name: 'name', weight: 0.7 },
-          { name: 'intent_phrases', weight: 0.5 },
+          { name: 'term', weight: 0.7 },
+          { name: 'service_name', weight: 0.5 },
           { name: 'category', weight: 0.3 },
         ],
         threshold: 0.4,
@@ -150,6 +181,27 @@
         self.$searchInput.val(name);
         self.closeSuggestions();
         self.performSearch();
+      });
+
+      // Chip click — search for that service
+      $(document).on('click', '.ssai-chip', function (e) {
+        e.preventDefault();
+        const serviceName = $(this).data('service');
+        if (serviceName) {
+          self.$searchInput.val(serviceName);
+          self.closeSuggestions();
+          self.performSearch();
+        }
+      });
+
+      // Example query click
+      $(document).on('click', '.ssai-example-link', function (e) {
+        e.preventDefault();
+        const query = $(this).data('query');
+        if (query) {
+          self.$searchInput.val(query);
+          self.handleSearchInput(query);
+        }
       });
     },
 
@@ -270,9 +322,12 @@
       }
 
       const results = this.fuse.search(query);
+      const bestScore = results.length > 0 ? results[0].score : 1;
+      // Fuse.js: 0 = perfect, 1 = no match. Low confidence if best > 0.35
+      const confidence = bestScore <= 0.15 ? 'high' : bestScore <= 0.35 ? 'medium' : 'low';
       const grouped = this.groupResultsByCategory(results);
 
-      this.renderSuggestions(query, grouped);
+      this.renderSuggestions(query, grouped, confidence);
       this.selectedSuggestionIndex = -1;
     },
 
@@ -293,6 +348,9 @@
         }
         seenServiceIds[item.service_id] = true;
 
+        // Use service_name as display name
+        item.name = item.service_name || item.term;
+
         if (!grouped[category]) {
           grouped[category] = [];
         }
@@ -305,7 +363,7 @@
     /**
      * Render suggestions dropdown with grouped results
      */
-    renderSuggestions: function (query, grouped) {
+    renderSuggestions: function (query, grouped, confidence) {
       const self = this;
       let html = '';
 
@@ -316,9 +374,52 @@
         return a.localeCompare(b);
       });
 
+      // If no results, show helpful empty state
+      if (categories.length === 0) {
+        html = this.renderEmptyState(query);
+        this.$suggestionsBox.html(html);
+        this.openSuggestions();
+        return;
+      }
+
+      // Collect top services for chip bar (max 3, deduplicated)
+      const topServices = [];
+      const seenChips = {};
+      categories.forEach(function (cat) {
+        grouped[cat].forEach(function (item) {
+          if (!seenChips[item.name] && topServices.length < 3) {
+            topServices.push(item);
+            seenChips[item.name] = true;
+          }
+        });
+      });
+
+      // Low confidence "Did you mean?" banner
+      if (confidence === 'low' && topServices.length > 0) {
+        html += '<div class="ssai-did-you-mean">';
+        html += '<span class="ssai-dym-label">Did you mean?</span>';
+        topServices.forEach(function (svc) {
+          html += '<span class="ssai-chip" data-service="' + self.escapeHtml(svc.name) + '">'
+            + self.escapeHtml(svc.name)
+            + '</span>';
+        });
+        html += '</div>';
+      }
+
+      // Service chips bar (for medium/high confidence)
+      if (confidence !== 'low' && topServices.length > 1) {
+        html += '<div class="ssai-chip-bar">';
+        topServices.forEach(function (svc) {
+          html += '<span class="ssai-chip" data-service="' + self.escapeHtml(svc.name) + '">'
+            + self.escapeHtml(svc.name)
+            + '</span>';
+        });
+        html += '</div>';
+      }
+
       categories.forEach(function (category) {
         const items = grouped[category];
-        html += `<div class="ssai-category-label">${self.escapeHtml(category)}</div>`;
+        html += '<div class="ssai-category-label">' + self.escapeHtml(category) + '</div>';
 
         items.slice(0, 5).forEach(function (item) {
           // Highlight matching text
@@ -327,21 +428,52 @@
             ? item.intent_phrases[0]
             : '';
 
-          html += `
-            <div class="ssai-suggestion-item" data-name="${self.escapeHtml(item.name)}" data-service-id="${self.escapeHtml(item.service_id)}">
-              <div class="ssai-suggestion-name">${highlightedName}</div>
-              ${
-                intentPhrase
-                  ? `<div class="ssai-suggestion-intent">"${self.escapeHtml(intentPhrase)}"</div>`
-                  : ''
-              }
-            </div>
-          `;
+          // Show match reason
+          let matchReason = '';
+          if (item.type === 'synonym') {
+            matchReason = 'Also known as: ' + self.escapeHtml(item.term);
+          } else if (item.type === 'intent' && item.term) {
+            matchReason = 'For: "' + self.escapeHtml(item.term) + '"';
+          }
+
+          html +=
+            '<div class="ssai-suggestion-item" data-name="' + self.escapeHtml(item.name) + '" data-service-id="' + self.escapeHtml(item.service_id) + '">' +
+              '<div class="ssai-suggestion-name">' + highlightedName + '</div>' +
+              (matchReason
+                ? '<div class="ssai-match-reason">' + matchReason + '</div>'
+                : (intentPhrase
+                  ? '<div class="ssai-suggestion-intent">"' + self.escapeHtml(intentPhrase) + '"</div>'
+                  : '')) +
+            '</div>';
         });
       });
 
       this.$suggestionsBox.html(html);
       this.openSuggestions();
+    },
+
+    /**
+     * Render helpful empty state with example queries
+     */
+    renderEmptyState: function (query) {
+      const self = this;
+      const examples = this.config.exampleQueries || [
+        'my toilet won\'t stop running',
+        'no hot water',
+        'pipe is leaking',
+      ];
+
+      let html = '<div class="ssai-empty-help">';
+      html += '<div class="ssai-empty-title">No matches for "' + this.escapeHtml(query) + '"</div>';
+      html += '<div class="ssai-empty-subtitle">Try describing your problem:</div>';
+      html += '<div class="ssai-example-list">';
+      examples.forEach(function (ex) {
+        html += '<a href="#" class="ssai-example-link" data-query="' + self.escapeHtml(ex) + '">'
+          + self.escapeHtml(ex)
+          + '</a>';
+      });
+      html += '</div></div>';
+      return html;
     },
 
     /**
@@ -354,7 +486,7 @@
 
       const escapedText = this.escapeHtml(text);
       const escapedQuery = this.escapeHtml(query);
-      const regex = new RegExp(`(${escapedQuery})`, 'gi');
+      const regex = new RegExp('(' + escapedQuery + ')', 'gi');
 
       return escapedText.replace(regex, '<strong>$1</strong>');
     },
@@ -376,14 +508,14 @@
      * Open the suggestions dropdown
      */
     openSuggestions: function () {
-      this.$suggestionsBox.addClass('visible');
+      this.$suggestionsBox.addClass('visible').show();
     },
 
     /**
      * Close the suggestions dropdown
      */
     closeSuggestions: function () {
-      this.$suggestionsBox.removeClass('visible');
+      this.$suggestionsBox.removeClass('visible').hide();
       this.selectedSuggestionIndex = -1;
     },
 
@@ -392,7 +524,8 @@
      */
     performSearch: function () {
       const query = this.$searchInput.val().trim();
-      const location = this.$locationInput.val().trim();
+      const location = this.$locationInput ? this.$locationInput.val() : '';
+      const locationTrimmed = (location || '').trim();
 
       if (!query) {
         return;
@@ -401,10 +534,10 @@
       // Show loading state
       this.$resultsContainer.html(
         '<div class="ssai-loading">Searching...</div>'
-      );
+      ).show();
 
       this.currentQuery = query;
-      this.currentLocation = location;
+      this.currentLocation = locationTrimmed;
 
       const self = this;
 
@@ -416,7 +549,7 @@
           action: 'ssai_search',
           nonce: this.config.nonce,
           query: query,
-          location: location,
+          location: locationTrimmed,
         },
         success: function (response) {
           self.closeSuggestions();
@@ -444,26 +577,27 @@
       const self = this;
       let html = '';
 
-      // Interpreted intent banner
-      if (data.interpreted_intent) {
-        html += `
-          <div class="ssai-interpreted">
-            <strong>Searching for:</strong> ${self.escapeHtml(data.interpreted_intent)}
-          </div>
-        `;
-      }
+      // Query → Match banner
+      const originalQuery = data.original_query || data.query || '';
+      const matchedServices = data.matched_services || [];
+      const confidence = data.confidence || 'none';
 
-      // Matched services as chips
-      if (data.matched_services && data.matched_services.length > 0) {
-        html += '<div class="ssai-matched-services">';
-        data.matched_services.forEach(function (service) {
-          html += `
-            <div class="ssai-service-chip">
-              ${self.escapeHtml(service.category)}: ${self.escapeHtml(service.name)}
-            </div>
-          `;
+      if (originalQuery && matchedServices.length > 0) {
+        html += '<div class="ssai-query-banner">';
+
+        if (confidence === 'low') {
+          html += '<div class="ssai-banner-query">No exact match for "<strong>' + self.escapeHtml(originalQuery) + '</strong>". Did you mean:</div>';
+        } else {
+          html += '<div class="ssai-banner-query">You searched for "<strong>' + self.escapeHtml(originalQuery) + '</strong>". Showing results for:</div>';
+        }
+
+        html += '<div class="ssai-chip-bar">';
+        matchedServices.forEach(function (service) {
+          html += '<span class="ssai-chip" data-service="' + self.escapeHtml(service.name) + '">'
+            + self.escapeHtml(service.name)
+            + '</span>';
         });
-        html += '</div>';
+        html += '</div></div>';
       }
 
       // Results posts
@@ -471,24 +605,31 @@
         html += '<div class="ssai-posts">';
         data.posts.forEach(function (post) {
           const thumbnail = post.thumbnail
-            ? `<img src="${post.thumbnail}" alt="${self.escapeHtml(post.title)}" />`
+            ? '<img src="' + post.thumbnail + '" alt="' + self.escapeHtml(post.title) + '" />'
             : '';
 
-          html += `
-            <div class="ssai-post-item">
-              ${thumbnail}
-              <div>
-                <a href="${post.url}" class="ssai-post-title" target="_blank" rel="noopener noreferrer">
-                  ${self.escapeHtml(post.title)}
-                </a>
-                <p class="ssai-post-excerpt">${self.escapeHtml(post.excerpt)}</p>
-              </div>
-            </div>
-          `;
+          html +=
+            '<div class="ssai-post-item">' +
+              thumbnail +
+              '<div>' +
+                '<a href="' + post.url + '" class="ssai-post-title" target="_blank" rel="noopener noreferrer">' +
+                  self.escapeHtml(post.title) +
+                '</a>' +
+                '<p class="ssai-post-excerpt">' + self.escapeHtml(post.excerpt) + '</p>' +
+              '</div>' +
+            '</div>';
         });
         html += '</div>';
+      } else if (matchedServices.length > 0) {
+        // Understood query but no company results
+        html += '<div class="ssai-no-results">';
+        html += 'We found matching services but no companies are listed yet for ';
+        html += '<strong>' + self.escapeHtml(matchedServices[0].name) + '</strong>. ';
+        html += 'Try a different service.';
+        html += '</div>';
       } else {
-        html += '<div class="ssai-no-results">No results found. Try a different search.</div>';
+        // Didn't understand query at all
+        html += this.renderEmptyResultsState(originalQuery);
       }
 
       // Powered by footer
@@ -498,15 +639,86 @@
     },
 
     /**
+     * Render empty results state with suggestions
+     */
+    renderEmptyResultsState: function (query) {
+      const self = this;
+      const examples = this.config.exampleQueries || [];
+
+      let html = '<div class="ssai-empty-help">';
+      html += '<div class="ssai-empty-title">No results for "' + this.escapeHtml(query) + '"</div>';
+      html += '<div class="ssai-empty-subtitle">Try describing your plumbing problem:</div>';
+      html += '<div class="ssai-example-list">';
+      examples.slice(0, 4).forEach(function (ex) {
+        html += '<a href="#" class="ssai-example-link" data-query="' + self.escapeHtml(ex) + '">'
+          + self.escapeHtml(ex)
+          + '</a>';
+      });
+      html += '</div></div>';
+      return html;
+    },
+
+    /**
      * Render error message
      */
     renderError: function (message) {
-      const html = `
-        <div class="ssai-no-results">
-          <strong>Error:</strong> ${this.escapeHtml(message)}
-        </div>
-      `;
+      const html =
+        '<div class="ssai-no-results">' +
+          '<strong>Error:</strong> ' + this.escapeHtml(message) +
+        '</div>';
       this.$resultsContainer.html(html);
+    },
+
+    /**
+     * Render search page banner (for WordPress search.php results page).
+     * Reads context from hidden div injected by PHP.
+     */
+    renderSearchPageBanner: function () {
+      const $ctx = $('#ssai-search-context');
+      if (!$ctx.length) return;
+
+      var context;
+      try {
+        context = JSON.parse($ctx.attr('data-context'));
+      } catch (e) {
+        return;
+      }
+
+      if (!context || !context.original_query) return;
+
+      const self = this;
+      const originalQuery = context.original_query;
+      const matched = context.matched_services || [];
+      const confidence = context.confidence || 'none';
+
+      // Build banner HTML
+      let html = '<div class="ssai-page-banner">';
+
+      if (matched.length > 0) {
+        if (confidence === 'low') {
+          html += '<div class="ssai-banner-query">No exact match for "<strong>' + self.escapeHtml(originalQuery) + '</strong>". Showing closest results:</div>';
+        } else {
+          html += '<div class="ssai-banner-query">You searched for "<strong>' + self.escapeHtml(originalQuery) + '</strong>". Showing results for:</div>';
+        }
+
+        html += '<div class="ssai-chip-bar">';
+        matched.forEach(function (svc) {
+          html += '<a href="/?s=' + encodeURIComponent(svc.name) + '" class="ssai-chip">'
+            + self.escapeHtml(svc.name)
+            + '</a>';
+        });
+        html += '</div>';
+      } else if (confidence === 'none') {
+        html += '<div class="ssai-banner-query">Showing keyword results for "<strong>' + self.escapeHtml(originalQuery) + '</strong>"</div>';
+      }
+
+      html += '</div>';
+
+      // Insert before the listing cards
+      const $target = $('#search_result .listing_cards, #search_result .container');
+      if ($target.length) {
+        $target.first().prepend(html);
+      }
     },
   };
 

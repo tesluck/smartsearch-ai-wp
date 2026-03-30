@@ -508,7 +508,24 @@
 }
 
 /* ============================================================================
-   "DID YOU MEAN?" — NOT USED IN DROPDOWN ANYMORE (kept for results banners)
+   DROPDOWN CHIPS BAR (top of dropdown, blue service pills)
+   ============================================================================ */
+
+.ssai-dropdown-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.ssai-dropdown-chips .ssai-chip {
+  font-size: 12px;
+  padding: 4px 12px;
+}
+
+/* ============================================================================
+   "DID YOU MEAN?" BANNER (amber, shown in dropdown for low confidence)
    ============================================================================ */
 
 .ssai-did-you-mean {

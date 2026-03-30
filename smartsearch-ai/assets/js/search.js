@@ -412,11 +412,33 @@
         });
       });
 
-      // Uniform rows — same structure regardless of confidence
+      // Top chips bar — show top 2-3 matched services as clickable pills
+      var topServices = allServices.slice(0, 3);
+
+      if (confidence === 'low' && topServices.length > 0) {
+        // Low confidence — amber "Did you mean?" banner with chips
+        html += '<div class="ssai-did-you-mean">';
+        html += '<span class="ssai-dym-label">Did you mean?</span>';
+        topServices.forEach(function (item) {
+          html += '<span class="ssai-chip ssai-suggestion-item" data-name="' + self.escapeHtml(item.name) + '">'
+            + self.escapeHtml(item.name) + '</span>';
+        });
+        html += '</div>';
+      } else if (topServices.length > 1) {
+        // Medium/high confidence — blue chips bar
+        html += '<div class="ssai-dropdown-chips">';
+        topServices.forEach(function (item) {
+          html += '<span class="ssai-chip ssai-suggestion-item" data-name="' + self.escapeHtml(item.name) + '">'
+            + self.escapeHtml(item.name) + '</span>';
+        });
+        html += '</div>';
+      }
+
+      // Suggestion rows below chips
       allServices.slice(0, 7).forEach(function (item) {
         var highlightedName = self.highlightMatches(item.name, query);
 
-        // Subtle context — keep it short
+        // Context — show WHY this matched (intent phrase, synonym, or category)
         var context = '';
         if (item.type === 'synonym' && item.term) {
           context = item.term;

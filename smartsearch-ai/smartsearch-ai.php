@@ -3,7 +3,7 @@
  * Plugin Name: SmartSearch AI
  * Plugin URI: https://timtesluck.com/smartsearch-ai
  * Description: Intelligent natural language search for WordPress. Your visitors describe their problem — SmartSearch AI understands what they need and shows the right results. Ships with 40+ home service categories out of the box, fully configurable for any industry. Optional AI-powered fallback for unmatched queries.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: Tim Tesluck
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'SSAI_VERSION', '1.0.2' );
+define( 'SSAI_VERSION', '1.0.3' );
 define( 'SSAI_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SSAI_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'SSAI_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
